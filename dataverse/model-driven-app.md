@@ -12,7 +12,7 @@ The Model-driven app provides operational visibility over the Access Requests li
 - Rejected
 - Fulfilled
 - Overdue / Reminder Sent
-- Escalated
+- EscalatedFlag
 - Records With Errors
 
 ## Suggested Form Sections
