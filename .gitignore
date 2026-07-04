@@ -1,0 +1,28 @@
+# Private local planning context
+source-notes/
+
+# macOS
+.DS_Store
+
+# Office / local planning files
+*.docx
+*.pages
+*.key
+*.numbers
+
+# Environment and secrets
+.env
+.env.*
+secrets.json
+connections.json
+local.settings.json
+
+# Logs and exports
+*.log
+*.zip
+*.msapp
+
+# Temporary files
+tmp/
+temp/
+*.tmp
