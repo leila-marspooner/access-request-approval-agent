@@ -82,18 +82,21 @@ The agent does not:
 
 Fulfilment/provisioning is mocked or simulated in this portfolio project unless future evidence shows a real provisioning integration.
 
-## Screenshot Evidence To Include
+## Screenshot Evidence
 
-Add public-safe screenshots for:
+Available evidence:
 
-- Request Access topic overview
+- [Copilot Studio agent overview](../screenshots/copilotStudioOverview.png)
+- [Request Access topic](../screenshots/copilotTopicRequestAccess1.png)
+- [Successful request submission test](../screenshots/copilotTopicRequestAccessTestSuccess.png)
+- [Failed/validation test response](../screenshots/copilotTopicRequestAccessTestFail.png)
+- [Check Access Status topic — full flow](../screenshots/copilotTopicCheckAccessStatusFullFlow.png)
+- [Secure agent authentication settings](../screenshots/copilotStudioAuthenticationSettings.png)
+
+Still to capture (redacted):
+
 - Admin access policy acknowledgement gate
-- Public agent request intake
-- Secure agent authentication or identity capture evidence after redaction
 - Flow A — Create Request call from the topic
-- GetStatus topic calling the GetStatus flow
-- Successful request submission response
-- Failed or validation response where useful
 
 ## Public Safety Notes
 

@@ -52,10 +52,15 @@ The fallback should be clear and modest, for example that the request details ar
 
 ## Screenshot Evidence
 
-Add redacted screenshots for:
+Available evidence:
 
-- Child flow overview
-- Environment variable usage
+- [Child flow overview](../screenshots/byomOverview.png)
+- [BYOM pattern explainer](../screenshots/byomExplainer.png)
+- [Set CaseSummary expression](../screenshots/byomSetSummaryExpression.png)
+- [Environment variables](../screenshots/environmentVariables.png)
+
+Still to capture (redacted):
+
 - Key Vault pattern where implemented
 - Successful CaseSummary response
 - Fallback path evidence

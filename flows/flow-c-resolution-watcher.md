@@ -67,9 +67,14 @@ Examples include notification failures, simulated fulfilment failures, and Datav
 
 ## Screenshot Evidence
 
-Add redacted screenshots for:
+Available evidence:
 
-- Flow C overview
+- [Flow C — Resolution Watcher overview](../screenshots/resolutionWatcher.png)
+- [Requester notification — access approved](../screenshots/email-access-success.png)
+- [Requester notification — access declined](../screenshots/email-access-declined.png)
+
+Still to capture (redacted):
+
 - Approved branch
 - Rejected branch
 - ResolvedOn and FulfilmentStarted checks

@@ -67,10 +67,15 @@ Where implemented, item errors should be captured on the request row or in an op
 
 ## Screenshot Evidence
 
-Add redacted screenshots for:
+Available evidence:
+
+- [Maximum reminders gate](../screenshots/slaMaxRemindersGate.png)
+- [TRY/CATCH handling — success path](../screenshots/slaTryFailCatchSuccess.png)
+- [Teams approval reminder](../screenshots/teamsApprovalReminder.png)
+
+Still to capture (redacted):
 
 - Recurrence trigger
 - Query/filter for overdue pending approvals
 - ReminderCount and LastReminderOn update
 - Escalated, EscalationCount, and EscalatedOn update
-- Item-level error handling where available

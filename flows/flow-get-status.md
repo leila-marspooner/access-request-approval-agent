@@ -39,9 +39,12 @@ The flow retrieves the matching Access Requests row and returns requester-safe l
 
 ## Screenshot Evidence
 
-Add redacted screenshots for:
+Available evidence:
 
-- Copilot Studio GetStatus topic
-- Flow lookup action
+- [GetStatus flow](../screenshots/getStatus.png)
+- [Check Access Status topic — full flow](../screenshots/copilotTopicCheckAccessStatusFullFlow.png)
+
+Still to capture (redacted):
+
 - Successful status response
 - Request-not-found path

@@ -65,10 +65,14 @@ If Flow H — SummariseCase fails, Flow A should continue with a fallback CaseSu
 
 ## Screenshot Evidence
 
-Add redacted screenshots for:
+Available evidence:
+
+- [Flow A — Create Request overview](../screenshots/createFlow1.png)
+- [Successful run history](../screenshots/createFlowRunHistorySuccess.png)
+
+Still to capture (redacted):
 
 - Flow trigger from Copilot Studio
 - CorrelationId generation
 - Flow H — SummariseCase call
 - Dataverse create row action
-- Successful run history with private details redacted

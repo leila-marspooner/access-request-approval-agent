@@ -63,10 +63,14 @@ Errors shown to users or approvers should be concise and should not reveal priva
 
 ## Screenshot Evidence
 
-Add redacted screenshots for:
+Available evidence:
+
+- [Flow B — Approval Watcher overview](../screenshots/approvalWatcherOverview.png)
+- [Teams Adaptive Card approval](../screenshots/teamsAccessRequestApproved.jpeg)
+
+Still to capture (redacted):
 
 - Dataverse trigger
 - ApprovalRequestSent idempotency check
-- Teams Adaptive Card action
 - Decision write-back
 - ApprovalError path where available
