@@ -294,21 +294,21 @@ A typical walkthrough shows:
 
 ---
 
-## What Recruiters and Reviewers Should Look For
+## Design Decisions Demonstrated
 
-This repo is intended to show more than a working chatbot.
+This project is designed to show more than a working chatbot. The strongest evidence is in the architecture and governance patterns behind the user experience.
 
-The strongest evidence is in the design patterns:
+Key design decisions include:
 
-- The agent does not own the approval decision.
-- Dataverse holds the authoritative state.
-- Power Automate handles deterministic workflow steps.
-- The approval watcher uses idempotency to prevent duplicate cards.
-- AI is isolated in a reusable child flow with fallback handling.
-- Secure mode captures signed-in Entra ID identity.
-- SLA monitoring demonstrates autonomous operational behaviour.
-- Errors are written back to Dataverse for supportability.
-- ALM documentation shows awareness of release discipline.
+- Copilot Studio handles conversational intake, but does not own the approval decision.
+- Dataverse holds the authoritative lifecycle state.
+- Power Automate handles deterministic workflow steps, retries, error capture, and audit-friendly write-back.
+- The approval watcher uses idempotency to prevent duplicate Teams approval cards.
+- AI summarisation is isolated in a reusable child flow with fallback handling.
+- The secure variant captures signed-in Entra ID identity rather than relying only on typed requester details.
+- SLA monitoring demonstrates autonomous operational behaviour beyond the initial chat.
+- Errors are written back to Dataverse so support users can review issues from the business record.
+- ALM documentation shows awareness of solution packaging, environment variables, connection references, and release discipline.
 
 ---
 
