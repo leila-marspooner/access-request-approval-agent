@@ -467,9 +467,16 @@ Use placeholders where evidence still needs to be added.
 
 ---
 
-## Screenshot Evidence
+## Evidence Screenshots
 
-Redacted build evidence is available in the [screenshots folder](screenshots/), covering:
+A short selection of redacted build evidence:
+
+| | |
+|---|---|
+| **Copilot Studio request intake — successful test** ![Copilot Studio request intake test success](screenshots/copilotTopicRequestAccessTestSuccess.png) | **Teams Adaptive Card approval** ![Teams Adaptive Card approval](screenshots/teamsAccessRequestApproved.jpeg) |
+| **Flow B — Approval Watcher** ![Flow B — Approval Watcher overview](screenshots/approvalWatcherOverview.png) | **Model-driven app — SLA form** ![Model-driven app form with SLA fields](screenshots/modelDrivenAppFormSLA.png) |
+
+The full evidence set is in the [screenshots folder](screenshots/), covering:
 
 - Copilot Studio topics, including request intake, validation, and status checks
 - Secure agent authentication settings
