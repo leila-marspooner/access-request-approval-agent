@@ -1,0 +1,269 @@
+{
+  "total_files_processed": 46,
+  "copied_unchanged": [
+    "accessCarouselBusinessRules.webp",
+    "accessCarouselEnvironmentVariables.webp",
+    "accessRequestsTableOverviewAudit.png",
+    "connectionReferences.png"
+  ],
+  "redacted": [
+    "accessCarouselAuth.webp",
+    "accessCarouselHistory.webp",
+    "accessCarouselLeastPrivilegeRequester.webp",
+    "accessCarouselRbac.png",
+    "accessCarouselRbac.webp",
+    "accessRequestsTableProperties.png",
+    "approvalWatcherOverview.png",
+    "auditHistory.png",
+    "byomExplainer.png",
+    "byomOverview.png",
+    "byomSetSummaryExpression.png",
+    "columnSecurityProfileAdminPermissions.png",
+    "copilotStudioAuthenticationSettings.png",
+    "copilotStudioOverview.png",
+    "copilotTopicCheckAccessStatusFullFlow.png",
+    "copilotTopicRequestAccess1.png",
+    "copilotTopicRequestAccessTestFail.png",
+    "copilotTopicRequestAccessTestSuccess.png",
+    "createFlow1.png",
+    "createFlowRunHistorySuccess.png",
+    "email-access-declined.png",
+    "email-access-success.png",
+    "environmentVariables.png",
+    "fieldLevelSecurityMaskedFields.png",
+    "getStatus.png",
+    "modelAppDashboardServicePerformance.png",
+    "modelAppRecordSummaryTraceabilityTab.png",
+    "modelDrivenAppEscalatedTickets.png",
+    "modelDrivenAppFormSLA.png",
+    "modelDrivenAppMyRequests.png",
+    "modelDrivenForm.png",
+    "modelDrivenFormRejectAccess.png",
+    "resolutionWatcher.png",
+    "securityRoleAdmin.png",
+    "securityRoleApprover.png",
+    "slaMaxRemindersGate.png",
+    "slaRecurrenceProperties.png",
+    "slaTryFailCatchSuccess.png",
+    "solutionOverview.png",
+    "teamsAccessRequestApproved.jpeg",
+    "teamsApprovalReminder.png",
+    "teamsApprovedRejectedNotification.png"
+  ],
+  "manual_review": [],
+  "redactions": {
+    "accessCarouselAuth.webp": [
+      "Client ID value",
+      "masked Client secret value"
+    ],
+    "accessCarouselHistory.webp": [
+      "audit actor name Leila Marchant",
+      "audit actor name Leila Marchant",
+      "audit actor name Leila Marchant",
+      "audit actor name Leila Marchant",
+      "audit actor name Leila Marchant"
+    ],
+    "accessCarouselLeastPrivilegeRequester.webp": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "accessCarouselRbac.png": [
+      "private environment name ITHelpdesk-v2 Dev",
+      "private business unit/org value",
+      "private business unit/org value",
+      "private business unit/org value"
+    ],
+    "accessCarouselRbac.webp": [
+      "private environment name ITHelpdesk-v2 Dev",
+      "private business unit/org value",
+      "private business unit/org value",
+      "private business unit/org value"
+    ],
+    "accessRequestsTableProperties.png": [
+      "private environment name ITHelpdesk-v2 Dev",
+      "signed-in profile initials/avatar",
+      "technical GUID-like row ID",
+      "technical GUID-like row ID",
+      "technical GUID-like row ID",
+      "technical GUID-like row ID",
+      "technical GUID-like row ID"
+    ],
+    "approvalWatcherOverview.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "auditHistory.png": [
+      "audit actor name Leila Marchant",
+      "audit actor name Leila Marchant",
+      "audit actor name Leila Marchant",
+      "private environment name in outer Power Apps header",
+      "signed-in profile initials/avatar",
+      "technical systemuser GUID value"
+    ],
+    "byomExplainer.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "byomOverview.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "byomSetSummaryExpression.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "columnSecurityProfileAdminPermissions.png": [
+      "signed-in profile initials/avatar"
+    ],
+    "copilotStudioAuthenticationSettings.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "copilotStudioOverview.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "copilotTopicCheckAccessStatusFullFlow.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "copilotTopicRequestAccess1.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "copilotTopicRequestAccessTestFail.png": [
+      "private environment name ITHelpdesk-v2 Dev",
+      "maker initials/avatar in test pane"
+    ],
+    "copilotTopicRequestAccessTestSuccess.png": [
+      "private environment name ITHelpdesk-v2 Dev",
+      "maker initials/avatar in test pane"
+    ],
+    "createFlow1.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "createFlowRunHistorySuccess.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "email-access-declined.png": [
+      "sender avatar initials; sender name and tenant email; recipient personal email; personal name in email header/greeting; personal email/account value",
+      "personal greeting name; personal name in email header/greeting"
+    ],
+    "email-access-success.png": [
+      "sender avatar initials; sender name and tenant email; recipient personal email; personal name in email header/greeting; personal email/account value",
+      "personal greeting name; personal name in email header/greeting"
+    ],
+    "environmentVariables.png": [
+      "private environment name ITHelpdesk-v2 Dev",
+      "signed-in profile initials/avatar",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant"
+    ],
+    "fieldLevelSecurityMaskedFields.png": [
+      "signed-in profile initials/avatar"
+    ],
+    "getStatus.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "modelAppDashboardServicePerformance.png": [
+      "signed-in profile initials/avatar",
+      "personal/demo email column value",
+      "personal/demo email column value",
+      "personal/demo email column value",
+      "personal/demo email column value",
+      "personal/demo email column value",
+      "personal/demo email column value"
+    ],
+    "modelAppRecordSummaryTraceabilityTab.png": [
+      "signed-in profile initials/avatar"
+    ],
+    "modelDrivenAppEscalatedTickets.png": [
+      "signed-in profile initials/avatar",
+      "personal email/account value",
+      "personal/demo email column value",
+      "personal/demo email column value",
+      "personal/demo email column value",
+      "personal email/account value",
+      "personal email/account value",
+      "personal email/account value",
+      "personal email/account value",
+      "personal email/account value",
+      "personal email/account value",
+      "personal email/account value"
+    ],
+    "modelDrivenAppFormSLA.png": [
+      "signed-in profile initials/avatar"
+    ],
+    "modelDrivenAppMyRequests.png": [
+      "signed-in profile initials/avatar"
+    ],
+    "modelDrivenForm.png": [
+      "signed-in profile initials/avatar",
+      "personal tenant RequestorEmail value; personal email/account value"
+    ],
+    "modelDrivenFormRejectAccess.png": [
+      "signed-in profile initials/avatar"
+    ],
+    "resolutionWatcher.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "securityRoleAdmin.png": [
+      "signed-in maker/admin profile area",
+      "private business unit/org values",
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "securityRoleApprover.png": [
+      "signed-in maker/admin profile area",
+      "private business unit/org values",
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "slaMaxRemindersGate.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "slaRecurrenceProperties.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "slaTryFailCatchSuccess.png": [
+      "private environment name ITHelpdesk-v2 Dev"
+    ],
+    "solutionOverview.png": [
+      "private environment name ITHelpdesk-v2 Dev",
+      "signed-in profile initials/avatar",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant",
+      "owner name Leila Marchant"
+    ],
+    "teamsAccessRequestApproved.jpeg": [
+      "profile/team initials avatar",
+      "personal tenant requester email; personal email/account value",
+      "reply/profile initials"
+    ],
+    "teamsApprovalReminder.png": [
+      "private Teams/channel/sidebar names; private Teams/sidebar account name",
+      "signed-in Teams profile/avatar",
+      "personal tenant requester email; personal email/account value",
+      "reply/profile initials",
+      "private Teams/workspace initials avatar"
+    ],
+    "teamsApprovedRejectedNotification.png": [
+      "private Teams/channel/sidebar names; private Teams/sidebar account name",
+      "signed-in Teams profile/avatar",
+      "personal tenant requester email; personal email/account value",
+      "personal tenant requester email; personal email/account value",
+      "private Teams/workspace initials avatar"
+    ]
+  },
+  "style": "strong blur/pixelation from original screenshots; no solid rectangles"
+}
