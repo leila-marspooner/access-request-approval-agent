@@ -1,68 +1,103 @@
 # ALM Release Checklist
 
-This checklist documents release discipline for the Access Request & Approval Agent portfolio project. It is not proof of production deployment.
+This checklist documents release discipline for the **Access Request & Approval Agent** portfolio project.
 
-## Solution Packaging
+It is not proof of production deployment. It shows the ALM thinking that would be expected before moving a Power Platform solution between environments.
 
-- Confirm solution name: `lai_AccessRequestAgent`
-- Confirm publisher prefix: `lai`
-- Confirm all required components are included in the solution
-- Export an Unmanaged solution for development backup
-- Export a Managed solution for target environment deployment when appropriate
-- Use MAJOR.MINOR.PATCH.BUILD versioning
+## Solution Identity
+
+| Item | Value |
+|---|---|
+| Solution name | `lai_AccessRequestAgent` |
+| Publisher prefix | `lai` |
+| Versioning pattern | MAJOR.MINOR.PATCH.BUILD |
+
+## Managed And Unmanaged Solutions
+
+- Use the unmanaged solution for development.
+- Export a managed solution for UAT or production-style import.
+- Retain previous managed solution packages as rollback artefacts.
+- Do not make direct hotfixes in UAT or production-style environments.
+- Fix in development, increment version, export, and redeploy.
 
 ## Environment Variables
 
-Confirm Environment variables are configured per environment and do not hardcode secrets or tenant-specific values:
+Confirm environment-specific values are externalised and not hardcoded in flow logic.
 
-- `lai_BYOM_Endpoint`
-- `lai_BYOM_DeploymentName`
-- `lai_BYOM_ApiVersion`
-- `lai_BYOM_ApiKey`
-- `lai_BYOM_SystemPrompt`
-- `lai_SLA_ReminderHours`
-- `lai_SLA_MaxReminders`
-- `lai_EscalationRecipient`
-- `lai_ApprovalChannelOrMailbox`
+Recommended variables include:
+
+- BYOM endpoint
+- BYOM deployment name
+- BYOM API version
+- BYOM system prompt
+- SLA reminder threshold
+- Maximum reminder count
+- Escalation recipient
+- Approval routing destination
+
+API keys, client secrets, bearer tokens, endpoint URLs, tenant URLs, and private recipient values must not be committed or shown in public screenshots.
 
 ## Connection References
 
-- Confirm Power Automate flows use Connection references.
-- Confirm connections are set after import.
-- Do not export or publish connection secrets.
-- Do not include private connection details in screenshots.
+- Confirm Power Automate flows use connection references.
+- Confirm connections are rebound after import.
+- Prefer service-owned or environment-appropriate connections for UAT/production-style deployments.
+- Do not publish personal connection details or connector secrets.
 
 ## Security Checks
 
 - Confirm RBAC roles are documented.
-- Confirm Least privilege intent is reviewed.
+- Confirm least privilege intent is reviewed.
 - Confirm Field Security Profile evidence is redacted before publishing.
-- Confirm Dataverse audit history is enabled where evidenced.
-- Confirm Draft-only editing behaviour is documented or evidenced.
+- Confirm Dataverse audit history evidence is redacted before publishing.
+- Confirm draft-only editing behaviour is documented or evidenced.
+- Confirm public/demo mode is not described as a secure production pattern.
 
 ## Flow Checks
 
-- Flow A — Create Request validates inputs and writes CorrelationId.
-- Flow H — SummariseCase has fallback handling.
-- GetStatus reads from Dataverse.
-- Flow B — Approval Watcher uses ApprovalRequestSent for Idempotency.
-- Flow C — Resolution Watcher prevents duplicate mock fulfilment.
-- Flow D — SLA Reminder / Escalation Watcher increments reminder and escalation fields.
-- TRY/CATCH and Error capture patterns are documented.
+| Flow | Release Check |
+|---|---|
+| Flow A — Create Request | Validates inputs, generates CorrelationId, creates Access Requests row |
+| Flow H — SummariseCase | Uses environment-driven BYOM configuration and fallback handling |
+| GetStatus | Reads current lifecycle state from Dataverse |
+| Flow B — Approval Watcher | Uses ApprovalRequestSent and ApprovalRequestSentOn to help prevent duplicate cards |
+| Flow C — Resolution Watcher | Uses ResolvedOn and FulfilmentStarted to help prevent duplicate resolution work |
+| Flow D — SLA Reminder / Escalation Watcher | Updates ReminderCount, LastReminderOn, Escalated, EscalationCount, and EscalatedOn |
 
-## Screenshot Review
+## Screenshot Checks
 
-- Remove tenant IDs, URLs, environment names, client IDs, secrets, tokens, emails, approver names, and private run history.
-- Use placeholder images where evidence is not ready.
-- Confirm no live Dataverse data is visible.
+Before publishing screenshots, remove or blur:
 
-## Definition Of Done
+- Tenant IDs, tenant names, tenant URLs, and environment URLs
+- Private environment names
+- Client IDs, app registration IDs, subscription IDs, and environment IDs
+- API keys, client secrets, bearer tokens, endpoint values, and Key Vault secret values
+- Real email addresses, personal account details, and private approver names
+- Private Power Automate run inputs/outputs
+- Connection details and personal maker connections
+
+## Pre-release Checks
 
 - README is accurate and public-safe.
-- All core docs are present.
-- source-notes/ is ignored.
-- No secrets or private data are committed.
-- Screenshot placeholders or redacted screenshots are included.
-- Fulfilment is clearly labelled as mocked/simulated.
-- AI summarisation is described as reviewer support, not a decision-maker.
-- Release checklist is complete for portfolio readiness.
+- Core docs are present and consistent.
+- Private local notes remain ignored.
+- No secrets, private notes, or unredacted screenshots are staged.
+- Fulfilment/provisioning is clearly described as mocked or simulated.
+- AI summarisation is described as reviewer support, not the decision-maker.
+
+## Post-import Checks
+
+- Connection references are bound.
+- Environment variables are populated.
+- Flows are enabled intentionally.
+- Security roles are assigned to the correct test users or teams.
+- Test request can be created.
+- Flow B — Approval Watcher sends only one Teams Adaptive Card.
+- Model-driven app shows the expected lifecycle fields.
+
+## Rollback Considerations
+
+- Keep previous managed solution exports.
+- Record the version being imported.
+- Keep release notes for meaningful changes.
+- Avoid deleting data or components without a rollback plan.

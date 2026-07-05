@@ -2,34 +2,71 @@
 
 ## Purpose
 
-Flow B — Approval Watcher detects Pending requests and sends a Teams Adaptive Card to the approver.
+Flow B — Approval Watcher monitors Dataverse for pending access requests and sends a Teams Adaptive Card to the approver.
+
+It captures the human decision and writes the result back to the Access Requests row.
 
 ## Trigger
 
 Dataverse row added or modified.
 
-## Trigger Logic
+## Detection Logic
 
-- Status = Pending
+The watcher should only process rows that meet the approval criteria, such as:
+
+- Status is Pending
 - ApprovalRequestSent is not true
+- ApproverEmail is present
 
-## Main Actions
+## Key Dataverse Fields Read
 
-- Check ApprovalRequestSent.
-- Set ApprovalRequestSent.
-- Stamp ApprovalRequestSentOn.
-- Send Teams Adaptive Card to ApproverEmail.
-- Include request details and CaseSummary.
-- Wait for approver response.
-- Capture ApproverDecision.
-- Capture ApproverComments.
-- Stamp DecisionOn.
-- Update Status to Approved or Rejected.
+- Status
+- Status Reason
+- ApproverEmail
+- ApprovalRequestSent
+- ApprovalRequestSentOn
+- ApplicationName
+- AccessLevel
+- Justification
+- DurationDays
+- CaseSummary
+- CorrelationId
+
+## Key Dataverse Fields Updated
+
+- ApprovalRequestSent
+- ApprovalRequestSentOn
+- ApproverDecision
+- ApproverComments
+- DecisionOn
+- Status
+- Status Reason
+- ApprovalError where required
 
 ## Idempotency
 
-ApprovalRequestSent and ApprovalRequestSentOn reduce duplicate Teams Adaptive Card risk if the Dataverse trigger fires more than once.
+ApprovalRequestSent and ApprovalRequestSentOn help prevent duplicate Teams Adaptive Cards.
 
-## Error Capture
+Recommended sequence:
 
-TRY/CATCH should write approval issues to ApprovalError so the Model-driven app can show operational errors.
+1. Confirm the request is pending.
+2. Check ApprovalRequestSent.
+3. Stamp ApprovalRequestSent and ApprovalRequestSentOn before sending the card.
+4. Send the Teams Adaptive Card.
+5. Exit cleanly if the watcher retriggers after the card has already been sent.
+
+## Error Handling
+
+Approval posting, response capture, and Dataverse update failures should be written to ApprovalError where practical.
+
+Errors shown to users or approvers should be concise and should not reveal private run data, connection details, or tenant-specific configuration.
+
+## Screenshot Evidence
+
+Add redacted screenshots for:
+
+- Dataverse trigger
+- ApprovalRequestSent idempotency check
+- Teams Adaptive Card action
+- Decision write-back
+- ApprovalError path where available

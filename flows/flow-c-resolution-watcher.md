@@ -4,29 +4,74 @@
 
 Flow C — Resolution Watcher processes approved and rejected outcomes after Flow B — Approval Watcher writes the decision back to Dataverse.
 
+For approved requests, fulfilment/provisioning is mocked or simulated in this portfolio project.
+
 ## Trigger
 
 Dataverse row modified.
 
+## Key Dataverse Fields Read
+
+- Status
+- Status Reason
+- ApproverDecision
+- ApproverComments
+- DecisionOn
+- RequestorEmail
+- ApplicationName
+- AccessLevel
+- CorrelationId
+- ResolvedOn
+- FulfilmentStarted
+
 ## Approved Path
 
-- Check FulfillmentStarted and/or FulfilledOn.
-- Mark FulfillmentStarted where used.
-- Send simulated access-granted notification.
-- Set Status to Fulfilled.
-- Stamp FulfilledOn.
-- Add FulfillmentNotes.
+1. Detect an approved decision.
+2. Check ResolvedOn and FulfilmentStarted to avoid duplicate processing.
+3. Mark FulfilmentStarted where used.
+4. Perform simulated fulfilment.
+5. Stamp ResolvedOn.
+6. Add FulfilmentNotes.
+7. Update Status and Status Reason.
+8. Notify the requester where implemented.
 
 ## Rejected Path
 
-- Notify requester of rejection.
-- Include ApproverComments where appropriate.
-- Do not trigger fulfilment.
+1. Detect a rejected decision.
+2. Confirm the request has not already been resolved.
+3. Stamp ResolvedOn.
+4. Update Status and Status Reason.
+5. Notify the requester where implemented.
+6. Do not perform fulfilment.
 
-## Important Limitation
+## Dataverse Fields Updated
 
-Fulfilment/provisioning is mocked or simulated in this portfolio project unless real provisioning evidence is added later.
+- Status
+- Status Reason
+- ResolvedOn
+- FulfilmentStarted
+- FulfilmentNotes
+- FulfilmentError where required
+- TimeToResolutionHours where implemented
+- PostDecisionResolutionHours where implemented
 
-## Error Capture
+## Idempotency
 
-TRY/CATCH should write failures to FulfillmentError.
+ResolvedOn, FulfilmentStarted, Status, and Status Reason help prevent duplicate resolution or repeated mock fulfilment work if the watcher retriggers.
+
+## Error Handling
+
+TRY/CATCH-style handling should write failures to FulfilmentError where practical.
+
+Examples include notification failures, simulated fulfilment failures, and Dataverse update failures.
+
+## Screenshot Evidence
+
+Add redacted screenshots for:
+
+- Flow C overview
+- Approved branch
+- Rejected branch
+- ResolvedOn and FulfilmentStarted checks
+- FulfilmentNotes write-back
+- FulfilmentError path where available

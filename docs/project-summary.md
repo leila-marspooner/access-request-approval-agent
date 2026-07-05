@@ -140,7 +140,7 @@ Flow D — SLA Reminder / Escalation Watcher runs on a schedule.
 
 It checks pending approvals, sends reminders, increments ReminderCount, stamps LastReminderOn, and escalates after configured thresholds.
 
-Escalation activity is written back to Dataverse using EscalatedFlag, EscalationCount, and EscalatedOn so operational follow-up is visible and auditable.
+Escalation activity is written back to Dataverse using Escalated, EscalationCount, and EscalatedOn so operational follow-up is visible and auditable.
 
 ---
 
@@ -294,7 +294,7 @@ Responsibilities:
 - Increment ReminderCount
 - Stamp LastReminderOn
 - Escalate after configured thresholds
-- Set EscalatedFlag where appropriate
+- Set Escalated where appropriate
 - Stamp EscalationCount and EscalatedOn
 - Continue processing other records if one item fails
 
@@ -346,9 +346,9 @@ Important fields include:
 
 ### Fulfilment / Resolution Tracking
 
-- FulfillmentStarted
-- FulfillmentNotes
-- FulfillmentError
+- FulfilmentStarted
+- FulfilmentNotes
+- FulfilmentError
 
 ### AI Summary
 
@@ -362,7 +362,7 @@ Important fields include:
 
 - ReminderCount
 - LastReminderOn
-- EscalatedFlag
+- Escalated
 - EscalationCount
 - EscalatedOn
 
@@ -383,7 +383,7 @@ Important fields include:
 - Owning Team
 - Owning User
 
-There is no separate risk flag field in the current schema. Escalation is tracked through EscalatedFlag, EscalationCount, and EscalatedOn.
+There is no separate risk flag field in the current schema. Escalation is tracked through Escalated, EscalationCount, and EscalatedOn.
 
 ---
 
@@ -481,14 +481,14 @@ Dataverse audit history supports traceability for key lifecycle changes, includi
 
 ### Idempotency
 
-Idempotency flags prevent duplicate processing.
+idempotency flags prevent duplicate processing.
 
 Examples:
 
 - ApprovalRequestSent prevents duplicate Teams approval cards.
-- FulfillmentStarted or ResolvedOn can prevent duplicate fulfilment/resolution processing.
+- FulfilmentStarted or ResolvedOn can prevent duplicate fulfilment/resolution processing.
 - ReminderCount and LastReminderOn help control reminder behaviour.
-- EscalatedFlag helps identify records that have already entered escalation state.
+- Escalated helps identify records that have already entered escalation state.
 
 ### Error Capture
 
@@ -560,7 +560,7 @@ Approval card failure should be written to ApprovalError or another dedicated er
 
 ### Fulfilment Failure
 
-Fulfilment or resolution failure should be written to FulfillmentError.
+Fulfilment or resolution failure should be written to FulfilmentError.
 
 ### Overdue Approval
 
@@ -568,7 +568,7 @@ Flow D identifies overdue pending approvals and records reminder/escalation acti
 
 ### Request Already In Escalation
 
-Flow D can use EscalatedFlag, EscalationCount, and EscalatedOn to avoid repeatedly escalating the same request without control.
+Flow D can use Escalated, EscalationCount, and EscalatedOn to avoid repeatedly escalating the same request without control.
 
 ### Missing Secure Identity Claim
 
@@ -590,7 +590,7 @@ The documented project includes:
 - Teams Adaptive Card approval
 - BYOM CaseSummary pattern
 - GetStatus status-check helper
-- Resolution watcher with simulated fulfilment
+- Flow C — Resolution Watcher with simulated fulfilment
 - SLA reminder and escalation watcher
 - Model-driven app visibility
 - RBAC, audit, idempotency, error capture, reporting metrics, and ALM documentation
@@ -648,11 +648,11 @@ When editing this repo:
 - Clearly distinguish built, demo-only, planned, and future features.
 - Preserve the names of flows, tables, fields, and agent variants.
 - Use the actual schema names from the Access Requests table.
-- Use ResolvedOn rather than FulfilledOn.
-- Preserve implementation field names exactly: FulfillmentError, FulfillmentNotes, and FulfillmentStarted.
-- Use EscalatedFlag, EscalationCount, and EscalatedOn for escalation tracking.
-- Do not introduce a RiskFlag field; there is no separate risk flag field in the current schema.
-- Do not publish private source notes.
+- Use ResolvedOn rather than legacy fulfilment-completion field naming.
+- Preserve implementation field names exactly: FulfilmentError, FulfilmentNotes, and FulfilmentStarted.
+- Use Escalated, EscalationCount, and EscalatedOn for escalation tracking.
+- Do not introduce a separate risk flag field; risk scoring is not part of the current schema.
+- Do not publish private local notes.
 - Do not include secrets, tenant-specific details, personal email addresses, live endpoint URLs, or private screenshots.
 - Use placeholder text where screenshots or implementation evidence still needs to be added.
 - Keep fulfilment described as mocked/simulated unless real provisioning evidence is added later.

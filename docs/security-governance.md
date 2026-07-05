@@ -194,12 +194,12 @@ Key fields may include:
 - Status
 - Status Reason
 - ResolvedOn
-- FulfillmentStarted
-- FulfillmentNotes
-- FulfillmentError
+- FulfilmentStarted
+- FulfilmentNotes
+- FulfilmentError
 - ReminderCount
 - LastReminderOn
-- EscalatedFlag
+- Escalated
 - EscalationCount
 - EscalatedOn
 - TimeToResolutionHours
@@ -245,9 +245,9 @@ Recommended secured fields include:
 | CorrelationId | Internal traceability identifier |
 | CaseSummary | AI-generated summary that may include operational context |
 | ApprovalError | Internal troubleshooting detail |
-| FulfillmentError | Internal troubleshooting detail |
-| FulfillmentNotes | Internal fulfilment or operational notes |
-| EscalatedFlag | Operational escalation flag |
+| FulfilmentError | Internal troubleshooting detail |
+| FulfilmentNotes | Internal fulfilment or operational notes |
+| Escalated | Operational escalation flag |
 | EscalationCount | Operational escalation tracking |
 | EscalatedOn | Operational escalation timestamp |
 
@@ -306,15 +306,15 @@ Recommended audited fields include:
 
 ### Fulfilment / Resolution Fields
 
-- FulfillmentStarted
-- FulfillmentNotes
-- FulfillmentError
+- FulfilmentStarted
+- FulfilmentNotes
+- FulfilmentError
 
 ### SLA / Escalation Fields
 
 - ReminderCount
 - LastReminderOn
-- EscalatedFlag
+- Escalated
 - EscalationCount
 - EscalatedOn
 
@@ -332,7 +332,7 @@ Do not publish audit screenshots that expose real user names, real email address
 
 ## Idempotency Controls
 
-Idempotency prevents duplicate processing when Dataverse triggers fire more than once or flows are retried.
+idempotency prevents duplicate processing when Dataverse triggers fire more than once or flows are retried.
 
 ### Approval Idempotency
 
@@ -355,7 +355,7 @@ This prevents duplicate Teams Adaptive Cards.
 
 Fulfilment and resolution idempotency can be controlled through:
 
-- FulfillmentStarted
+- FulfilmentStarted
 - ResolvedOn
 - Status
 - Status Reason
@@ -390,18 +390,18 @@ This reduces reminder spam and makes reminder activity auditable.
 
 Escalation behaviour is controlled through:
 
-- EscalatedFlag
+- Escalated
 - EscalationCount
 - EscalatedOn
 
 Recommended pattern:
 
 1. Flow D checks whether the request has exceeded the configured reminder threshold.
-2. If escalation is required, it sets EscalatedFlag.
+2. If escalation is required, it sets Escalated.
 3. It increments EscalationCount and stamps EscalatedOn.
 4. It avoids repeatedly escalating the same request without control.
 
-There is no separate risk flag field in the current schema. Escalation is tracked through EscalatedFlag, EscalationCount, and EscalatedOn.
+There is no separate risk flag field in the current schema. Escalation is tracked through Escalated, EscalationCount, and EscalatedOn.
 
 ---
 
@@ -416,7 +416,7 @@ Recommended error fields:
 | Field | Purpose |
 |---|---|
 | ApprovalError | Stores concise approval watcher error detail |
-| FulfillmentError | Stores concise resolution or simulated fulfilment error detail |
+| FulfilmentError | Stores concise resolution or simulated fulfilment error detail |
 
 ### Approval Errors
 
@@ -431,7 +431,7 @@ Examples:
 
 ### Resolution / Fulfilment Errors
 
-Flow C — Resolution Watcher should write errors to FulfillmentError when resolution or simulated fulfilment fails.
+Flow C — Resolution Watcher should write errors to FulfilmentError when resolution or simulated fulfilment fails.
 
 Examples:
 
@@ -627,10 +627,10 @@ Useful form sections include:
 
 ### Resolution / Fulfilment
 
-- FulfillmentStarted
+- FulfilmentStarted
 - ResolvedOn
-- FulfillmentNotes
-- FulfillmentError
+- FulfilmentNotes
+- FulfilmentError
 
 ### Summary and Traceability
 
@@ -641,7 +641,7 @@ Useful form sections include:
 
 - ReminderCount
 - LastReminderOn
-- EscalatedFlag
+- Escalated
 - EscalationCount
 - EscalatedOn
 

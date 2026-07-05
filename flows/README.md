@@ -25,16 +25,16 @@ This design keeps Copilot Studio focused on user interaction while Power Automat
 
 ---
 
-## Flow List
+## Flow Summary
 
-| Flow | Role |
-|---|---|
-| Flow A — Create Request | Validates request input, generates CorrelationId, calls SummariseCase, creates the Dataverse Access Requests record, and returns structured confirmation to Copilot Studio |
-| Flow H — SummariseCase | Generates CaseSummary through Azure OpenAI BYOM using environment-variable-driven configuration and fallback handling |
-| GetStatus | Returns the current request lifecycle state from Dataverse to Copilot Studio |
-| Flow B — Approval Watcher | Sends one Teams Adaptive Card approval request and captures the approver decision back into Dataverse |
-| Flow C — Resolution Watcher | Processes approved/rejected outcomes, stamps resolution fields, and performs simulated fulfilment where appropriate |
-| Flow D — SLA Reminder / Escalation Watcher | Monitors overdue approvals, sends reminders, increments reminder counters, and records escalation state |
+| Flow | Trigger | Role |
+|---|---|---|
+| Flow A — Create Request | Copilot Studio | Validates request input, generates CorrelationId, calls SummariseCase, creates the Dataverse Access Requests record, and returns structured confirmation to Copilot Studio |
+| Flow H — SummariseCase | Child flow called by Flow A | Generates CaseSummary through Azure OpenAI BYOM using environment-variable-driven configuration and fallback handling |
+| GetStatus | Copilot Studio | Returns the current request lifecycle state from Dataverse to Copilot Studio |
+| Flow B — Approval Watcher | Dataverse row added or modified | Sends one Teams Adaptive Card approval request and captures the approver decision back into Dataverse |
+| Flow C — Resolution Watcher | Dataverse row modified | Processes approved/rejected outcomes, stamps resolution fields, and performs simulated fulfilment where appropriate |
+| Flow D — SLA Reminder / Escalation Watcher | Scheduled recurrence | Monitors overdue approvals, sends reminders, increments reminder counters, and records escalation state |
 
 ---
 
@@ -302,16 +302,16 @@ Dataverse row modified.
 - AccessLevel
 - CorrelationId
 - ResolvedOn
-- FulfillmentStarted
+- FulfilmentStarted
 
 ### Key Dataverse Fields Updated
 
 - Status
 - Status Reason
 - ResolvedOn
-- FulfillmentStarted
-- FulfillmentNotes
-- FulfillmentError where required
+- FulfilmentStarted
+- FulfilmentNotes
+- FulfilmentError where required
 - TimeToResolutionHours where implemented
 - PostDecisionResolutionHours where implemented
 
@@ -320,7 +320,7 @@ Dataverse row modified.
 Resolution idempotency can be controlled through:
 
 - ResolvedOn
-- FulfillmentStarted
+- FulfilmentStarted
 - Status
 - Status Reason
 
@@ -336,7 +336,7 @@ Recommended pattern:
 
 - Fulfilment is mocked or simulated unless future evidence shows real provisioning.
 - Real provisioning through Microsoft Graph, Entra groups, application roles, or ITSM integration is future scope.
-- Errors should be written to FulfillmentError.
+- Errors should be written to FulfilmentError.
 - The lifecycle should close cleanly for both approved and rejected outcomes.
 
 ---
@@ -361,7 +361,7 @@ Scheduled recurrence.
 - Increment ReminderCount
 - Stamp LastReminderOn
 - Escalate after configured thresholds
-- Set EscalatedFlag where appropriate
+- Set Escalated where appropriate
 - Stamp EscalationCount and EscalatedOn
 
 ### Key Dataverse Fields Read
@@ -374,7 +374,7 @@ Scheduled recurrence.
 - ApproverEmail
 - ReminderCount
 - LastReminderOn
-- EscalatedFlag
+- Escalated
 - EscalationCount
 - EscalatedOn
 
@@ -382,7 +382,7 @@ Scheduled recurrence.
 
 - ReminderCount
 - LastReminderOn
-- EscalatedFlag
+- Escalated
 - EscalationCount
 - EscalatedOn
 
@@ -392,7 +392,7 @@ Reminder and escalation behaviour is controlled through:
 
 - ReminderCount
 - LastReminderOn
-- EscalatedFlag
+- Escalated
 - EscalationCount
 - EscalatedOn
 
@@ -404,9 +404,9 @@ Recommended pattern:
 4. Send a reminder if below threshold.
 5. Increment ReminderCount and stamp LastReminderOn.
 6. Escalate once configured thresholds are reached.
-7. Stamp EscalatedFlag, EscalationCount, and EscalatedOn.
+7. Stamp Escalated, EscalationCount, and EscalatedOn.
 
-There is no separate risk flag field in the current schema. Escalation is tracked through EscalatedFlag, EscalationCount, and EscalatedOn.
+There is no separate risk flag field in the current schema. Escalation is tracked through Escalated, EscalationCount, and EscalatedOn.
 
 ### Governance Notes
 
@@ -442,19 +442,19 @@ Errors should be captured in Dataverse fields where possible.
 Relevant fields include:
 
 - ApprovalError
-- FulfillmentError
+- FulfilmentError
 
 This makes operational issues visible in the model-driven app.
 
 ### Idempotency
 
-Idempotency controls are used to prevent duplicate processing.
+idempotency controls are used to prevent duplicate processing.
 
 Examples:
 
 - ApprovalRequestSent prevents duplicate approval cards.
-- ResolvedOn and FulfillmentStarted help prevent duplicate resolution work.
-- ReminderCount, LastReminderOn, EscalatedFlag, EscalationCount, and EscalatedOn control reminder/escalation behaviour.
+- ResolvedOn and FulfilmentStarted help prevent duplicate resolution work.
+- ReminderCount, LastReminderOn, Escalated, EscalationCount, and EscalatedOn control reminder/escalation behaviour.
 
 ### Human-in-the-Loop Approval
 
@@ -478,6 +478,23 @@ Do not hardcode:
 
 ---
 
+## Common Troubleshooting Notes
+
+| Symptom | Likely Area To Check |
+|---|---|
+| Request created but no approval card appears | Flow B trigger conditions, ApprovalRequestSent, ApproverEmail, Teams connection reference |
+| Duplicate approval cards appear | ApprovalRequestSent stamping order and Dataverse trigger filtering |
+| CaseSummary is blank | Flow H fallback handling, BYOM environment variables, Azure OpenAI connection, Key Vault configuration where used |
+| Status check returns stale information | GetStatus lookup criteria and Dataverse row update timing |
+| Approved request processes more than once | Flow C idempotency checks using ResolvedOn and FulfilmentStarted |
+| SLA reminders repeat too often | Flow D threshold logic, ReminderCount, LastReminderOn, and recurrence frequency |
+| Escalation repeats unexpectedly | Escalated, EscalationCount, and EscalatedOn update logic |
+| Error is visible only in run history | ApprovalError and FulfilmentError write-back paths |
+
+These troubleshooting notes are for portfolio review and future maintainers. They should not include private flow run inputs, connection details, endpoint values, or tenant-specific configuration.
+
+---
+
 ## Screenshot Checklist
 
 Add redacted screenshots for each flow when ready.
@@ -496,10 +513,10 @@ Add redacted screenshots for each flow when ready.
 - Teams Adaptive Card generated by Flow B
 - Flow B writing ApproverDecision and ApproverComments to Dataverse
 - Flow C — Resolution Watcher overview
-- Flow C showing ResolvedOn / FulfillmentStarted logic
+- Flow C showing ResolvedOn / FulfilmentStarted logic
 - Flow D — SLA Reminder / Escalation Watcher overview
 - Flow D showing ReminderCount / LastReminderOn update
-- Flow D showing EscalatedFlag / EscalationCount / EscalatedOn update
+- Flow D showing Escalated / EscalationCount / EscalatedOn update
 
 ### Nice-to-Have Screenshots
 
@@ -508,7 +525,7 @@ Add redacted screenshots for each flow when ready.
 - BYOM fallback test
 - SLA watcher test run
 - Error written to ApprovalError
-- Error written to FulfillmentError
+- Error written to FulfilmentError
 - Connection references
 - Environment variables
 - Managed solution evidence

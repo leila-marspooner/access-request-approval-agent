@@ -1,63 +1,59 @@
 # Build Notes
 
-## Build Log
+These notes summarise the implementation direction for the **Access Request & Approval Agent** portfolio case study.
 
-### Initial Design
+They are public documentation, not private build notes. Do not add secrets, tenant values, endpoint URLs, real emails, or private implementation exports here.
 
-The project is designed as a portfolio/demo Access Request & Approval Agent. It demonstrates a governed access request lifecycle rather than a production access management replacement.
+## Design Summary
 
-### Agent Design
+The project demonstrates a governed access request lifecycle:
 
-The Access Request Agent collects application, access level, justification, duration, requester identity, and approver information. Public/demo mode is low-friction. Secure mode demonstrates Entra ID identity capture.
-
-### Flow Design
-
-The solution uses a six-flow architecture:
-
-- Flow A — Create Request
-- Flow H — SummariseCase
-- GetStatus
-- Flow B — Approval Watcher
-- Flow C — Resolution Watcher
-- Flow D — SLA Reminder / Escalation Watcher
-
-### Governance Design
-
-Governance patterns include Dataverse as system of record, RBAC, Least privilege, Draft-only editing, Field Security Profile, Dataverse audit history, Idempotency, TRY/CATCH, Error capture, CorrelationId, Environment variables, Connection references, and ALM release checks.
+- Copilot Studio collects the request.
+- Flow A — Create Request creates the Dataverse record.
+- Flow H — SummariseCase creates CaseSummary using a BYOM Azure OpenAI pattern.
+- Flow B — Approval Watcher sends a Teams Adaptive Card.
+- Flow C — Resolution Watcher processes the approved/rejected outcome.
+- Flow D — SLA Reminder / Escalation Watcher monitors overdue approvals.
+- GetStatus returns current state from Dataverse.
+- The model-driven app supports operational review.
 
 ## Key Decisions
 
 ### Use Dataverse As System Of Record
 
-Dataverse stores lifecycle state, approval decisions, timestamps, error fields, reminders, escalation fields, and fulfilment notes. The process does not rely on chat history as the record of truth.
+Dataverse stores lifecycle state, decisions, timestamps, error fields, reminders, escalation fields, fulfilment notes, and metrics. Chat history is not treated as the record of truth.
 
 ### Keep Approval Logic Outside The Chat Layer
 
-Power Automate handles approval, resolution, SLA monitoring, and fulfilment because those steps need deterministic control, retries, run history, Idempotency, and Dataverse write-back.
+Power Automate handles approval, resolution, SLA monitoring, and fulfilment because those steps need deterministic control, retries, run history, idempotency, and Dataverse write-back.
 
 ### Provide Public And Secure Modes
 
-Access Request Agent (Public) supports public portfolio review. Access Request Agent (Internal Auth / Secure) demonstrates a stronger enterprise pattern using Entra ID identity capture.
+Access Request Agent (Public) supports public portfolio review. Access Request Agent (Internal Auth / Secure) demonstrates Entra ID-backed identity capture for a more enterprise-aligned pattern.
 
 ### Use BYOM As A Child Flow
 
-Flow H — SummariseCase keeps Azure OpenAI summarisation reusable and configurable. The CaseSummary helps reviewers but does not decide access.
+Flow H — SummariseCase keeps AI summarisation reusable and configurable. CaseSummary helps reviewers but does not decide access.
 
 ### Keep Fulfilment Mocked
 
-Flow C — Resolution Watcher uses simulated fulfilment for the portfolio case study. Real provisioning through Graph, Entra ID groups, application roles, or ITSM tooling is a future improvement.
+Flow C — Resolution Watcher uses simulated fulfilment for the portfolio case study. Real provisioning through Microsoft Graph, Entra ID groups, app roles, or ITSM tooling is future scope.
+
+## Current Build Status
+
+The repo documents the intended architecture, flow responsibilities, Dataverse schema, governance controls, demo path, and ALM approach. Public screenshots should be added only after redaction.
 
 ## Issues To Watch
 
-- Screenshots must be redacted before publishing.
-- Public docs must not include tenant IDs, tenant URLs, environment URLs, real emails, client secrets, endpoint URLs, bearer tokens, connection details, or private run history.
-- Field security and audit claims should be tied to screenshot or implementation evidence before being described as fully implemented.
-- ALM materials should be described as portfolio release discipline, not proof of production deployment.
+- Do not overclaim production readiness.
+- Do not imply real provisioning is built.
+- Do not publish tenant/environment details or personal account information.
+- Tie Field Security Profile, audit, RBAC, and DLP claims to evidence where available.
+- Keep AI summarisation framed as reviewer support.
 
-## Next Steps
+## Next Documentation Tasks
 
 - Add redacted screenshots.
-- Add architecture diagram.
-- Add implementation evidence references where safe.
-- Review public docs for terminology consistency.
-- Prepare first GitHub commit after user approval.
+- Add the architecture diagram.
+- Add evidence references next to relevant docs.
+- Add release notes once solution package evidence is available.

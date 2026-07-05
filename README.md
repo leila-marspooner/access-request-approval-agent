@@ -101,7 +101,7 @@ This project demonstrates a more governed pattern: a simple conversational exper
 - CaseSummary and CorrelationId for review and traceability
 - ApprovalRequestSent and ApprovalRequestSentOn for approval idempotency
 - ResolvedOn and fulfilment fields for lifecycle closure
-- ReminderCount, LastReminderOn, EscalatedFlag, EscalationCount, and EscalatedOn for SLA tracking
+- ReminderCount, LastReminderOn, Escalated, EscalationCount, and EscalatedOn for SLA tracking
 - TimeToApproveHours, TimeToResolutionHours, and PostDecisionResolutionHours for reporting
 
 ### Security and Governance
@@ -110,7 +110,7 @@ This project demonstrates a more governed pattern: a simple conversational exper
 - Draft-only editing guardrail
 - Field Security Profile evidence where implemented
 - Dataverse audit history
-- Error capture through ApprovalError and FulfillmentError
+- Error capture through ApprovalError and FulfilmentError
 - CorrelationId for cross-system tracing
 - Environment-variable-driven configuration
 - Connection references
@@ -177,7 +177,7 @@ The project uses six focused Power Automate flows rather than one large orchestr
 | GetStatus | Helper flow that returns the current lifecycle state from Dataverse to Copilot Studio |
 | Flow B — Approval Watcher | Dataverse-triggered watcher that posts one Teams Adaptive Card and writes the approver decision back to Dataverse |
 | Flow C — Resolution Watcher | Processes approved and rejected outcomes, stamps resolution and fulfilment fields, notifies the requester where implemented, and logs failures |
-| Flow D — SLA Reminder / Escalation Watcher | Scheduled watcher that detects overdue approvals, sends reminders, increments counters, sets EscalatedFlag where appropriate, and escalates after a threshold |
+| Flow D — SLA Reminder / Escalation Watcher | Scheduled watcher that detects overdue approvals, sends reminders, increments counters, sets Escalated where appropriate, and escalates after a threshold |
 
 ---
 
@@ -254,9 +254,9 @@ The **Access Requests** table is the authoritative system of record.
 
 ### Fulfilment / Resolution Tracking
 
-- FulfillmentStarted
-- FulfillmentNotes
-- FulfillmentError
+- FulfilmentStarted
+- FulfilmentNotes
+- FulfilmentError
 
 ### AI Summary
 
@@ -266,7 +266,7 @@ The **Access Requests** table is the authoritative system of record.
 
 - ReminderCount
 - LastReminderOn
-- EscalatedFlag
+- Escalated
 - EscalationCount
 - EscalatedOn
 
@@ -276,7 +276,7 @@ The **Access Requests** table is the authoritative system of record.
 - TimeToResolutionHours
 - PostDecisionResolutionHours
 
-There is no separate risk flag field in the current schema. Escalation is tracked through EscalatedFlag, EscalationCount, and EscalatedOn.
+There is no separate risk flag field in the current schema. Escalation is tracked through Escalated, EscalationCount, and EscalatedOn.
 
 ---
 
@@ -425,8 +425,7 @@ access-request-approval-agent/
 ├── dataverse/
 ├── screenshots/
 ├── demo/
-├── assets/
-└── source-notes/  # private/ignored
+└── assets/
 ```
 
 ---
@@ -491,7 +490,7 @@ Use placeholders where evidence still needs to be added.
 - Flow C — Resolution Watcher
 - Flow D — SLA Reminder / Escalation Watcher
 - Model-driven app views
-- SLA / escalation fields: ReminderCount, LastReminderOn, EscalatedFlag, EscalationCount, EscalatedOn
+- SLA / escalation fields: ReminderCount, LastReminderOn, Escalated, EscalationCount, EscalatedOn
 - Reporting metrics: TimeToApproveHours, TimeToResolutionHours, PostDecisionResolutionHours
 - RBAC role evidence
 - Audit history evidence

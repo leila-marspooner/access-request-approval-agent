@@ -48,16 +48,16 @@ Preserve project terminology exactly, including:
 - ApproverDecision
 - ApproverComments
 - DecisionOn
-- FulfilledOn
-- FulfillmentStarted
-- FulfillmentNotes
+- ResolvedOn
+- FulfilmentStarted
+- FulfilmentNotes
 - ApprovalError
-- FulfillmentError
+- FulfilmentError
 - ReminderCount
 - LastReminderOn
+- Escalated
 - EscalationCount
 - EscalatedOn
-- EscalatedFlag
 - RBAC
 - Least privilege
 - Draft-only editing
@@ -78,6 +78,6 @@ Never include secrets, API keys, client secrets, bearer tokens, tenant IDs, tena
 
 This repo should make clear that the project is a portfolio/demo case study, not a production access management system. Do not claim it replaces Microsoft Entra ID Governance, a production identity governance platform, or an enterprise ITSM/access management tool.
 
-Preserve the design principle that approval, resolution, SLA monitoring, and fulfilment logic are implemented in Power Automate rather than Agent Flows for governance, reliability, retry control, Idempotency, run history, Error capture, and Dataverse write-back.
+Preserve the design principle that approval, resolution, SLA monitoring, and fulfilment logic are implemented in Power Automate rather than Agent Flows for governance, reliability, retry control, idempotency, run history, error capture, and Dataverse write-back.
 
 Explain changes in plain English because the repo owner is learning.

@@ -1,8 +1,10 @@
 # Architecture
 
-## High-Level Design
+The **Access Request & Approval Agent** demonstrates a governed Power Platform architecture for access request intake and approval.
 
-The Access Request & Approval Agent uses Copilot Studio as the user-facing entry point and Power Automate as the deterministic orchestration layer. Dataverse stores the authoritative Access Requests record, Teams Adaptive Cards capture Human-in-the-loop approval, Azure OpenAI BYOM generates a CaseSummary, and a Model-driven app gives operations users visibility into the lifecycle.
+Copilot Studio provides the conversational front end. Power Automate handles deterministic lifecycle orchestration. Dataverse stores the authoritative record. Teams Adaptive Cards capture human approval. Azure OpenAI BYOM generates CaseSummary as reviewer support. The model-driven app gives operational visibility.
+
+## High-Level Flow
 
 ```text
 Requester
@@ -11,49 +13,63 @@ Requester
   -> Flow H — SummariseCase
   -> Dataverse Access Requests
   -> Flow B — Approval Watcher
-  -> Teams Adaptive Card approver decision
+  -> Teams Adaptive Card
   -> Dataverse decision update
   -> Flow C — Resolution Watcher
   -> Flow D — SLA Reminder / Escalation Watcher
-  -> Model-driven app operational visibility
+  -> Model-driven app
 ```
 
 ## Why Power Automate Instead Of Agent Flows
 
-Approval, resolution, SLA monitoring, and fulfilment logic are implemented in Power Automate rather than Agent Flows. These lifecycle steps need deterministic branching, Idempotency, retry handling, run history, TRY/CATCH, Error capture, and reliable Dataverse write-back.
+Approval, resolution, SLA monitoring, and fulfilment logic are implemented in Power Automate because these lifecycle steps need:
 
-The agent stays focused on conversational intake, validation, policy acknowledgement, and status lookup.
+- Deterministic branching
+- Retry control
+- Run history
+- Idempotency
+- TRY/CATCH-style error capture
+- Dataverse write-back
+- Operational supportability
+
+The agent stays focused on intake, validation, acknowledgement, and status lookup.
+
+## Dataverse-Centred Design
+
+The Access Requests table is the system of record. It stores request details, Status, Status Reason, approval fields, CaseSummary, CorrelationId, ResolvedOn, fulfilment fields, reminder fields, escalation fields, error fields, and metrics.
+
+Watcher flows use Dataverse state to decide what should happen next. This makes the lifecycle inspectable through the model-driven app rather than hidden in chat history.
 
 ## Public And Secure Modes
 
-### Public/Demo Mode
-
-Access Request Agent (Public) is designed for low-friction demonstration. It can collect RequestorEmail / UPN conversationally so a reviewer can see the flow without tenant sign-in.
-
-### Secure/Enterprise Mode
-
-Access Request Agent (Internal Auth / Secure) and Access Request (Secure) demonstrate Entra ID identity capture. In this mode, RequestorEmail / UPN and RequestorAadObjectId are captured from authenticated context where available instead of relying on a user-typed value.
-
-## Dataverse Layer
-
-Dataverse is the system of record. The Access Requests table stores request details, Status, approval state, timestamps, CaseSummary, CorrelationId, error fields, reminder counters, escalation fields, and fulfilment notes.
-
-Dataverse is not passive storage in this design. It is the lifecycle authority that watcher flows read from and write back to.
+| Mode | Purpose | Identity Pattern |
+|---|---|---|
+| Access Request Agent (Public) | Low-friction public portfolio demo | RequestorEmail / UPN may be collected conversationally |
+| Access Request Agent (Internal Auth / Secure) | Enterprise-aligned authenticated pattern | RequestorEmail / UPN and RequestorAadObjectId are captured from Entra ID context where available |
 
 ## AI Summarisation Layer
 
-Flow H — SummariseCase uses an Azure OpenAI BYOM pattern to create CaseSummary. The summary helps the approver review context quickly, but it does not approve, reject, risk-score, or make access decisions.
+Flow H — SummariseCase uses a BYOM Azure OpenAI pattern to generate CaseSummary.
 
-Configuration is driven by Environment variables and Key Vault-backed secret handling where applicable. If the model call fails, the process should return a deterministic fallback summary so Flow A — Create Request can continue.
+The summary helps the approver review context. It does not approve, reject, risk-score, or provision access. If the AI call fails, the request should continue with a deterministic fallback summary.
 
 ## Operational Visibility
 
-The Model-driven app gives approvers, fulfilment/operations users, and admins a structured view of Access Requests records, Status, decision fields, CaseSummary, Error capture, reminders, escalation state, and Dataverse audit history.
+The model-driven app surfaces:
 
-## Architecture Diagram Placeholder
+- Current request status
+- Approval decisions and comments
+- CaseSummary and CorrelationId
+- Mock fulfilment and resolution state
+- SLA reminder and escalation fields
+- Error capture
+- Dataverse audit history
+- Operational metrics
 
-Add a public-safe architecture diagram here when ready:
+## Diagram Placeholder
+
+Add a public-safe architecture diagram when ready:
 
 - `architecture/access-request-architecture.png`
 
-The diagram should show Copilot Studio, Power Automate flows, Dataverse, Teams Adaptive Card approval, Entra ID, Azure OpenAI, Key Vault, Environment variables, Connection references, and the Model-driven app. Do not include tenant URLs, environment URLs, endpoint URLs, email addresses, IDs, secrets, or private run data.
+The diagram should not include tenant URLs, environment URLs, endpoint URLs, email addresses, IDs, secrets, or private run data.

@@ -2,30 +2,42 @@
 
 ## Purpose
 
-Access Request Agent (Public) is the low-friction demo variant of the Access Request & Approval Agent. It lets a portfolio reviewer see the conversational request experience without requiring tenant sign-in.
+**Access Request Agent (Public)** is the low-friction portfolio/demo variant of the Access Request & Approval Agent.
+
+It lets reviewers understand the conversational request experience without needing access to a private tenant or authenticated environment.
 
 ## Behaviour
 
 The public agent collects:
 
-- Application name
-- Access level
-- Business justification
-- Duration in days
-- RequestorEmail / UPN as a conversational input
+- ApplicationName
+- AccessLevel
+- Justification
+- DurationDays
+- RequestorEmail / UPN as conversational input
 - ApproverEmail
 
-If Admin access is requested, the agent shows a policy acknowledgement gate before Flow A — Create Request is called.
+After validation, the agent calls Flow A — Create Request. The created Access Requests row becomes the authoritative record.
 
-## Important Limitation
+## Public Mode Identity Limitation
 
-Because this is public/demo mode, requester identity may be typed by the user. That is useful for demo accessibility but is not the secure enterprise pattern. The secure variant should be used when trusted identity capture is required.
+Public mode may use a requester email typed by the user. That is useful for demo accessibility, but it is not the secure enterprise pattern.
+
+For trusted identity capture, use **Access Request Agent (Internal Auth / Secure)** or **Access Request (Secure)**, where requester identity can be captured from Entra ID context.
+
+## Admin Access Gate
+
+When AccessLevel is Admin, the topic should present a policy acknowledgement gate before calling Flow A — Create Request.
+
+This demonstrates a governed intake pattern, but it should not be presented as a production-grade access control by itself.
 
 ## Flow Calls
 
-- Flow A — Create Request creates the Dataverse Access Requests row.
-- GetStatus retrieves request status from Dataverse.
+| Flow | Use |
+|---|---|
+| Flow A — Create Request | Creates the Access Requests Dataverse row and returns structured confirmation |
+| GetStatus | Retrieves current lifecycle state from Dataverse |
 
-## Demo Notes
+## Demo Safety
 
-Use redacted demo values only. Do not use real email addresses, private approver names, tenant-specific application names, or live access data in public screenshots.
+Use fictional data only. Do not publish screenshots containing real email addresses, private approver names, tenant details, environment URLs, endpoint URLs, connection details, client IDs, secrets, or live access data.

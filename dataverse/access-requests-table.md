@@ -2,26 +2,35 @@
 
 ## Purpose
 
-Access Requests is the Dataverse table that stores every request and lifecycle event for the Access Request & Approval Agent.
+**Access Requests** is the Dataverse table that holds the lifecycle record for each request.
+
+It is the authoritative source for request details, status, decisions, timestamps, AI summary, reminders, escalation, errors, and operational metrics.
+
+## Lifecycle Pattern
+
+1. Flow A — Create Request creates the Access Requests row.
+2. Flow H — SummariseCase returns CaseSummary for reviewer support.
+3. Flow B — Approval Watcher sends one Teams Adaptive Card and writes the decision back.
+4. Flow C — Resolution Watcher processes the approved or rejected outcome and records simulated fulfilment where appropriate.
+5. Flow D — SLA Reminder / Escalation Watcher monitors overdue pending approvals.
+6. GetStatus reads the current lifecycle state from Dataverse for Copilot Studio.
 
 ## Ownership
 
-User or team ownership is recommended so requester, approver, fulfilment/operations, and admin security models can be aligned to RBAC and Least privilege.
-
-## Lifecycle
-
-1. Flow A — Create Request creates a row.
-2. Status starts as Pending after validation.
-3. Flow B — Approval Watcher sends the Teams Adaptive Card and writes the approver decision.
-4. Flow C — Resolution Watcher processes approved/rejected outcomes.
-5. Flow D — SLA Reminder / Escalation Watcher updates reminder and escalation fields.
-6. GetStatus reads the current lifecycle state from Dataverse.
+User or team ownership is recommended so requester, approver, fulfilment/operations, admin, and optional automation service roles can be aligned to least privilege.
 
 ## Key Governance Controls
 
-- CorrelationId supports traceability.
-- ApprovalRequestSent supports approval Idempotency.
-- FulfillmentStarted and FulfilledOn support fulfilment Idempotency.
-- ReminderCount, LastReminderOn, EscalationCount, EscalatedOn, and EscalatedFlag support SLA tracking.
-- ApprovalError and FulfillmentError make operational issues visible.
-- Dataverse audit history supports lifecycle review.
+| Control | Supporting Fields |
+|---|---|
+| Traceability | Request Number, CorrelationId |
+| Approval idempotency | ApprovalRequestSent, ApprovalRequestSentOn |
+| Resolution/fulfilment idempotency | FulfilmentStarted, ResolvedOn, Status, Status Reason |
+| SLA monitoring | ReminderCount, LastReminderOn |
+| Escalation tracking | Escalated, EscalationCount, EscalatedOn |
+| Error capture | ApprovalError, FulfilmentError |
+| Operational reporting | TimeToApproveHours, TimeToResolutionHours, PostDecisionResolutionHours |
+
+## Portfolio Scope
+
+The table demonstrates a governed lifecycle pattern. It does not prove production deployment, and fulfilment/provisioning remains mocked or simulated unless future evidence shows a real provisioning integration.
