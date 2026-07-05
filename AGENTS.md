@@ -80,4 +80,4 @@ This repo should make clear that the project is a portfolio/demo case study, not
 
 Preserve the design principle that approval, resolution, SLA monitoring, and fulfilment logic are implemented in Power Automate rather than Agent Flows for governance, reliability, retry control, idempotency, run history, error capture, and Dataverse write-back.
 
-Explain changes in plain English because the repo owner is learning.
+Explain changes in plain English.

@@ -33,7 +33,7 @@ This project demonstrates a more governed pattern where the user experience rema
 
 ## Portfolio Positioning
 
-Position this project as an **enterprise-aligned Power Platform / Copilot Studio portfolio case study**.
+This project is positioned as an **enterprise-aligned Power Platform / Copilot Studio portfolio case study**.
 
 It demonstrates:
 
@@ -49,7 +49,7 @@ It demonstrates:
 - Operational reporting fields
 - ALM and release discipline
 
-Do not position this as a live production access management platform. A real production deployment would require further security review, tenant-specific DLP validation, operational monitoring, environment hardening, and real provisioning integration.
+It is not positioned as a live production access management platform. A real production deployment would require further security review, tenant-specific DLP validation, operational monitoring, environment hardening, and real provisioning integration.
 
 ---
 
@@ -481,7 +481,7 @@ Dataverse audit history supports traceability for key lifecycle changes, includi
 
 ### Idempotency
 
-idempotency flags prevent duplicate processing.
+Idempotency flags prevent duplicate processing.
 
 Examples:
 
@@ -639,7 +639,7 @@ Potential future improvements include:
 
 ---
 
-## Repository Notes for Codex
+## Documentation Conventions
 
 When editing this repo:
 

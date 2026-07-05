@@ -66,10 +66,10 @@ The model-driven app surfaces:
 - Dataverse audit history
 - Operational metrics
 
-## Diagram Placeholder
+## Architecture Diagram
 
-Add a public-safe architecture diagram when ready:
+![Access Request & Approval Agent architecture](../architecture/solution-architecture-diagram.png)
 
-- `architecture/access-request-architecture.png`
+A scalable version is available at [architecture/solution-architecture-access.svg](../architecture/solution-architecture-access.svg).
 
-The diagram should not include tenant URLs, environment URLs, endpoint URLs, email addresses, IDs, secrets, or private run data.
+Architecture diagrams must not include tenant URLs, environment URLs, endpoint URLs, email addresses, IDs, secrets, or private run data.

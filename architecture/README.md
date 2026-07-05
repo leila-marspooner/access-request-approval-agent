@@ -47,13 +47,16 @@ This is especially important for approval and SLA processes, where duplicate mes
 | Access Request Agent (Public) | Easy portfolio review and demo testing | RequestorEmail / UPN may be typed by the requester |
 | Access Request Agent (Internal Auth / Secure) | Enterprise-aligned intake pattern | RequestorEmail / UPN and RequestorAadObjectId are captured from Entra ID context where available |
 
-## Planned Diagram
+## Solution Architecture Diagram
 
-Recommended file:
+![Access Request & Approval Agent architecture](solution-architecture-diagram.png)
 
-- `access-request-architecture.png`
+Diagram files:
 
-The diagram should show:
+- `solution-architecture-diagram.png`
+- `solution-architecture-access.svg` (scalable version)
+
+The diagram covers:
 
 - Access Request Agent (Public)
 - Access Request Agent (Internal Auth / Secure)

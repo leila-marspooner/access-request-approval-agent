@@ -139,15 +139,9 @@ Requester
 
 ### Architecture Diagram
 
-> Diagram to be added: `architecture/access-request-architecture.png`
+![Access Request & Approval Agent architecture](architecture/solution-architecture-diagram.png)
 
-When the architecture diagram is added, use:
-
-```markdown
-![Access Request & Approval Agent architecture](architecture/access-request-architecture.png)
-```
-
-The diagram should show the request lifecycle from Copilot Studio through Power Automate, Dataverse, Teams Adaptive Cards, the model-driven app, Entra ID, and Azure OpenAI / Key Vault.
+The diagram shows the request lifecycle from Copilot Studio through Power Automate, Dataverse, Teams Adaptive Cards, the model-driven app, Entra ID, and Azure OpenAI / Key Vault. A scalable version is available at [architecture/solution-architecture-access.svg](architecture/solution-architecture-access.svg).
 
 ---
 
@@ -473,38 +467,20 @@ Use placeholders where evidence still needs to be added.
 
 ---
 
-## Suggested Screenshots
+## Screenshot Evidence
 
-### Essential
+Redacted build evidence is available in the [screenshots folder](screenshots/), covering:
 
-- Copilot Studio request topic
-- Admin-access policy acknowledgement gate
-- Secure sign-in prompt
-- Dataverse Access Requests row
-- Request Number and status evidence
-- Teams Adaptive Card approval
-- Approval decision written back to Dataverse
-- Flow A — Create Request
-- Flow H — SummariseCase
-- Flow B — Approval Watcher idempotency check
-- Flow C — Resolution Watcher
-- Flow D — SLA Reminder / Escalation Watcher
-- Model-driven app views
-- SLA / escalation fields: ReminderCount, LastReminderOn, Escalated, EscalationCount, EscalatedOn
-- Reporting metrics: TimeToApproveHours, TimeToResolutionHours, PostDecisionResolutionHours
-- RBAC role evidence
-- Audit history evidence
-- Environment variables and connection references
-
-### Nice to Have
-
-- Architecture diagram
-- Demo website channel
+- Copilot Studio topics, including request intake, validation, and status checks
 - Secure agent authentication settings
-- Redacted Entra app registration evidence
-- BYOM fallback run
-- SLA reminder run history
-- ALM release checklist evidence
+- Flow evidence for request creation, approval, resolution, and SLA monitoring
+- BYOM CaseSummary configuration
+- Teams Adaptive Card approval and notifications
+- Dataverse table, audit history, and field-level security evidence
+- Model-driven app views, including SLA, escalation, and service performance
+- RBAC security roles, environment variables, and connection references
+
+See [screenshots/README.md](screenshots/README.md) for the evidence index and redaction rules.
 
 ---
 
@@ -518,7 +494,6 @@ Use placeholders where evidence still needs to be added.
 - Add monitoring and alerting for failed flows.
 - Package and test managed releases across Dev/Test/Prod-style environments.
 - Expand automated testing evidence.
-- Add public architecture diagram once finalised.
 
 ---
 

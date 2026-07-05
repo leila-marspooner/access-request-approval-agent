@@ -49,6 +49,5 @@ These items are realistic next steps for the **Access Request & Approval Agent**
 
 ## Architecture
 
-- Add a public architecture diagram.
 - Add a production-hardening diagram showing Graph provisioning, monitoring, service accounts, and DLP boundaries.
 - Add optional integration points for ITSM and Entra ID Governance without claiming replacement.

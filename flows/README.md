@@ -448,7 +448,7 @@ This makes operational issues visible in the model-driven app.
 
 ### Idempotency
 
-idempotency controls are used to prevent duplicate processing.
+Idempotency controls are used to prevent duplicate processing.
 
 Examples:
 
@@ -554,32 +554,16 @@ Use demo data and redacted screenshots only.
 
 ## Flow Documentation Files
 
-Recommended individual flow documentation files:
+Each flow has its own documentation file:
 
-```text
-flows/
-├── README.md
-├── flow-a-create-request.md
-├── flow-h-summarise-case.md
-├── flow-get-status.md
-├── flow-b-approval-watcher.md
-├── flow-c-resolution-watcher.md
-└── flow-d-sla-watcher.md
-```
+- [Flow A — Create Request](flow-a-create-request.md)
+- [Flow H — SummariseCase](flow-h-summarise-case.md)
+- [GetStatus](flow-get-status.md)
+- [Flow B — Approval Watcher](flow-b-approval-watcher.md)
+- [Flow C — Resolution Watcher](flow-c-resolution-watcher.md)
+- [Flow D — SLA Reminder / Escalation Watcher](flow-d-sla-watcher.md)
 
-Each individual flow file should include:
-
-- Purpose
-- Trigger
-- Inputs
-- Outputs
-- Dataverse fields read
-- Dataverse fields updated
-- Key logic
-- Error handling
-- Idempotency controls
-- Screenshot placeholders
-- Known gaps or future improvements
+Each file covers purpose, trigger, inputs and outputs, Dataverse fields read and updated, key logic, error handling, and idempotency controls.
 
 ---
 

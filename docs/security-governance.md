@@ -332,7 +332,7 @@ Do not publish audit screenshots that expose real user names, real email address
 
 ## Idempotency Controls
 
-idempotency prevents duplicate processing when Dataverse triggers fire more than once or flows are retried.
+Idempotency prevents duplicate processing when Dataverse triggers fire more than once or flows are retried.
 
 ### Approval Idempotency
 

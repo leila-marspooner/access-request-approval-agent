@@ -41,7 +41,7 @@ Flow C — Resolution Watcher uses simulated fulfilment for the portfolio case s
 
 ## Current Build Status
 
-The repo documents the intended architecture, flow responsibilities, Dataverse schema, governance controls, demo path, and ALM approach. Public screenshots should be added only after redaction.
+The repo documents the architecture, flow responsibilities, Dataverse schema, governance controls, demo path, and ALM approach, supported by redacted screenshots in `screenshots/` and the architecture diagram in `architecture/`.
 
 ## Issues To Watch
 
@@ -53,7 +53,5 @@ The repo documents the intended architecture, flow responsibilities, Dataverse s
 
 ## Next Documentation Tasks
 
-- Add redacted screenshots.
-- Add the architecture diagram.
 - Add evidence references next to relevant docs.
 - Add release notes once solution package evidence is available.

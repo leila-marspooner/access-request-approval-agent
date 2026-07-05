@@ -4,29 +4,18 @@ This folder is for public-safe screenshots only.
 
 Screenshots are evidence for the portfolio case study. They should show the agent, flows, Dataverse, Teams Adaptive Cards, model-driven app, security controls, and ALM artefacts without exposing private tenant, account, endpoint, or configuration details.
 
-## Suggested Subfolders
+## Organisation and Naming
 
-```text
-screenshots/
-├── agent/
-├── flows/
-├── dataverse/
-├── teams/
-├── governance/
-├── alm/
-└── demo/
-```
+Screenshots are stored in this folder with descriptive camelCase filenames grouped by prefix, for example:
 
-## Naming Convention
-
-Use descriptive, stable filenames:
-
-- `agent-request-access-topic.png`
-- `flow-a-create-request-overview.png`
-- `teams-approval-card-redacted.png`
-- `dataverse-access-request-record.png`
-- `model-driven-app-sla-view.png`
-- `alm-connection-references.png`
+- `copilotTopic...` — Copilot Studio topic and agent evidence
+- `createFlow...`, `approvalWatcher...`, `resolutionWatcher...`, `sla...`, `getStatus...` — Power Automate flow evidence
+- `byom...` — Azure OpenAI BYOM CaseSummary configuration
+- `accessRequestsTable...`, `auditHistory...`, `fieldLevelSecurity...` — Dataverse and audit evidence
+- `modelDriven...`, `modelApp...` — model-driven app views
+- `securityRole...`, `accessCarousel...` — RBAC and governance evidence
+- `teams...`, `email-...` — Teams approval and notification evidence
+- `environmentVariables`, `connectionReferences`, `solutionOverview` — ALM evidence
 
 ## Required Screenshot Set
 
@@ -81,4 +70,4 @@ Keep denser evidence, such as audit history and full flow canvases, in the relev
 
 ## Publishing Rule
 
-Do not commit unredacted screenshots. Use placeholders until safe screenshots are ready.
+Do not commit unredacted screenshots. All screenshots in this folder must pass the redaction rules above before publishing.
