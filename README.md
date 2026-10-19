@@ -22,7 +22,7 @@ This project shows how a Copilot Studio agent can act as the front door to a gov
 
 ## One-Minute Overview
 
-A requester asks for access in Copilot Studio. The agent collects structured details such as application, access level, justification, duration, and approver.
+A requester asks for access in Copilot Studio and supplies application, access level, justification and duration. Public/demo mode also collects requester and approver emails. Secure mode validates signed-in identity before intake, uses signed-in requester email and follows a manager lookup path in Flow A.
 
 Flow A — Create Request creates a Dataverse Access Requests record and generates a CorrelationId. Flow H — SummariseCase creates a reviewer-support CaseSummary using a BYOM Azure OpenAI pattern. Flow B — Approval Watcher sends a Teams Adaptive Card for human approval. Flow C — Resolution Watcher records the approved or rejected outcome and performs simulated fulfilment where appropriate. Flow D — SLA Reminder / Escalation Watcher monitors overdue approvals. GetStatus lets the requester check progress directly from Dataverse.
 
@@ -124,17 +124,15 @@ This project demonstrates a more governed pattern: a simple conversational exper
 The build is intentionally modular.
 
 ```text
-Requester
-  -> Copilot Studio Agent
-  -> Flow A — Create Request
-  -> Flow H — SummariseCase
-  -> Dataverse Access Requests
-  -> Flow B — Approval Watcher
-  -> Teams Adaptive Card
-  -> Dataverse decision update
-  -> Flow C — Resolution Watcher
-  -> Flow D — SLA Reminder / Escalation Watcher
-  -> Model-driven app visibility
+Requester -> Copilot Studio -> Flow A — Create Request -> Dataverse Access Requests
+                                  |                          |
+                                  v                          +-> Flow B — Approval Watcher
+                           Flow H — SummariseCase                 -> Teams decision -> Dataverse
+                                                             +-> Flow C — Resolution Watcher
+                                                                  -> Simulated fulfilment / closure -> Dataverse
+Scheduled Flow D — SLA Reminder / Escalation Watcher <-> Dataverse
+Copilot Studio -> GetStatus <-> Dataverse
+Model-driven app <-> Dataverse
 ```
 
 ### Architecture Diagram
@@ -197,12 +195,12 @@ Copilot Studio is used for user interaction. Power Automate and Dataverse contro
 
 | Mode | Purpose | Identity Pattern |
 |---|---|---|
-| Access Request Agent (Public) | Low-friction portfolio review and demo testing | Requester email can be collected conversationally |
-| Access Request Agent (Internal Auth / Secure) | Enterprise-aligned pattern using Entra ID | RequestorEmail / UPN and RequestorAadObjectId are captured from signed-in identity |
+| Access Request Agent (Public) | Low-friction portfolio review and demo testing | Requester and approver emails collected conversationally; typed identity is demo input |
+| Access Request Agent (Internal Auth / Secure) | Authenticated intake with manager lookup | Checks sign-in, principal name and email; uses signed-in email and passes principal name through the existing ApproverEmail flow input |
 
 Building both modes is intentional.
 
-The public version makes the project easier for reviewers to understand and test. The secure version demonstrates how the same pattern can be adapted for identity-aware enterprise scenarios without trusting user-typed identity data.
+The [secure topic](agents/secure-agent.md) stops when required identity claims are missing. [Flow A](flows/flow-a-create-request.md) shows manager lookup and separate manager-email and lookup-error paths. `RequestorAadObjectId` remains part of the schema/design; capture is not shown in the current six-input topic call. The public/demo contract needs separate verification against the current flow configuration.
 
 ---
 
@@ -280,7 +278,7 @@ A typical walkthrough shows:
 
 1. Requester opens the Copilot Studio agent.
 2. Requester asks for access to an application.
-3. Agent collects application, access level, justification, duration, and approver.
+3. Agent collects application, access level, justification and duration. Public/demo mode asks for requester and approver emails; secure mode first checks signed-in identity and uses manager lookup in Flow A.
 4. Admin-level access triggers a policy acknowledgement gate.
 5. Flow A creates the Dataverse request record.
 6. Flow H generates a CaseSummary.
@@ -289,7 +287,7 @@ A typical walkthrough shows:
 9. Approver approves or rejects with comments.
 10. Dataverse stores ApproverDecision, ApproverComments, and DecisionOn.
 11. Flow C processes the outcome and simulates fulfilment where appropriate.
-12. Flow D demonstrates overdue approval reminder and escalation logic.
+12. Flow D shows reminder/escalation configuration; delivery, write-back and continuation after item failure still need runtime verification.
 13. The model-driven app shows the full lifecycle state, error fields, SLA fields, and audit evidence.
 
 ---
@@ -476,6 +474,8 @@ A short selection of redacted build evidence:
 | **Earlier Copilot Studio intake configuration** ![Earlier request intake topic configuration](screenshots/copilotTopicRequestAccessTestSuccess.png) | **Teams Adaptive Card approval** ![Teams Adaptive Card approval](screenshots/teamsAccessRequestApproved.jpeg) |
 | **Requester status response** ![Status response showing request details and summary](screenshots/copilotStatusAllowed.png) | **Model-driven app — SLA form** ![Model-driven app form with SLA fields](screenshots/modelDrivenAppFormSLA.png) |
 
+[Create Request run evidence](flows/flow-a-create-request.md#screenshot-evidence) shows successful pictured actions and a lookup NotFound run. [GetStatus responses](flows/flow-get-status.md#observed-status-responses) show allowed and generic denied results; the underlying ownership predicate remains to verify. [SLA evidence](flows/flow-d-sla-watcher.md#screenshot-evidence) shows branch and error-scope configuration, not verified continuation after item failure.
+
 The full evidence set is in the [screenshots folder](screenshots/), covering:
 
 - Copilot Studio topics, including request intake, validation, and status checks
@@ -509,9 +509,3 @@ See [screenshots/README.md](screenshots/README.md) for the evidence index and re
 This is a portfolio project built to demonstrate Power Platform, Copilot Studio, Dataverse, Power Automate, Teams, Entra ID, governance, and secure agent design patterns.
 
 It is not a production access management system. Real-world deployment would require additional security review, DLP policy configuration, tenant-specific identity governance, production monitoring, and integration with approved provisioning systems.
-
-## Updated Secure Workflow Evidence
-
-The public/demo path can collect an approver conversationally. In the updated secure path, the topic supplies signed-in principal name through the legacy `ApproverEmail` input and Create Request includes manager lookup; expanded lookup parameters remain unverified.
-
-The latest [secure topic](agents/secure-agent.md#updated-signed-in-intake-evidence) validates signed-in identity before intake. [Create Request](flows/flow-a-create-request.md#updated-manager-lookup-and-responses) shows manager lookup, row creation and error responses. [GetStatus](flows/flow-get-status.md#observed-status-responses) shows allowed and generic denied responses; the exact ownership predicate remains to verify. [SLA evidence](flows/flow-d-sla-watcher.md#updated-reminder-and-error-handling-configuration) shows reminder/escalation branches and nested error scopes as configuration, not passing runtime tests. The six-flow architecture is retained, and fulfilment remains simulated.

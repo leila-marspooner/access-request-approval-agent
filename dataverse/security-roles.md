@@ -65,12 +65,13 @@ Recommended privileges:
 
 ## Evidence To Include
 
-Add redacted screenshots for:
+Available redacted evidence:
 
-- Requester role privileges
-- Approver role privileges
-- Admin role privileges
-- Field Security Profile where implemented
-- Model-driven app access by role where practical
+- [Requester role privileges](../screenshots/accessCarouselLeastPrivilegeRequester.webp)
+- [Approver role privileges](../screenshots/securityRoleApprover.png)
+- [Admin role privileges](../screenshots/securityRoleAdmin.png)
+- [Field Security Profile permissions](../screenshots/columnSecurityProfileAdminPermissions.png) and [masked fields](../screenshots/fieldLevelSecurityMaskedFields.png)
+
+Controlled model-driven app access tests by role remain useful verification. Role screenshots do not establish GetStatus flow-side authorization; see [ownership verification](../flows/flow-get-status.md#ownership-restrictions-and-verification).
 
 Only describe roles as fully implemented where public-safe evidence exists. Otherwise, describe them as documented governance design.

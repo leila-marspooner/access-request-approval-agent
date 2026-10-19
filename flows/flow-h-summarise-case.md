@@ -38,7 +38,7 @@ Do not publish endpoint URLs, API keys, bearer tokens, client secrets, or Key Va
 
 ## Fallback Handling
 
-If the model call fails, times out, or is throttled, the flow should return a deterministic fallback summary so Flow A — Create Request can continue.
+The canvas shows a CATCH action named Case Summary Fallback. Its intended behaviour is to return a deterministic fallback if the model call fails, times out or is throttled, allowing Flow A — Create Request to continue. The configured action is visible; those failure conditions and parent continuation are not verified by the configuration screenshot.
 
 The fallback should be clear and modest, for example that the request details are available for reviewer assessment but AI summarisation was unavailable.
 
@@ -59,8 +59,4 @@ Available evidence:
 - [Set CaseSummary expression](../screenshots/byomSetSummaryExpression.png)
 - [Environment variables](../screenshots/environmentVariables.png)
 
-Still to capture (redacted):
-
-- Key Vault pattern where implemented
-- Successful CaseSummary response
-- Fallback path evidence
+The fallback action is already visible in the overview; the Set CaseSummary expression image also shows CATCH/FINALLY structure. Still needed: expanded secret-reference configuration without values, the child-flow returned payload, and forced failure/throttling evidence showing fallback returned and parent creation continuing. A summary in a conversation does not prove how the child flow produced it.

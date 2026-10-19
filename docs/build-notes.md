@@ -29,7 +29,7 @@ Power Automate handles approval, resolution, SLA monitoring, and fulfilment beca
 
 ### Provide Public And Secure Modes
 
-Access Request Agent (Public) supports public portfolio review. Access Request Agent (Internal Auth / Secure) demonstrates Entra ID-backed identity capture for a more enterprise-aligned pattern.
+Access Request Agent (Public) documents typed requester and approver emails for demo review. Access Request Agent (Internal Auth / Secure) validates sign-in, principal name and email, uses signed-in requester email, and passes principal name through the existing ApproverEmail flow input. Flow A contains manager lookup; expanded lookup/row mappings and public-contract compatibility remain to verify.
 
 ### Use BYOM As A Child Flow
 
@@ -41,7 +41,7 @@ Flow C — Resolution Watcher uses simulated fulfilment for the portfolio case s
 
 ## Current Build Status
 
-The repo documents the architecture, flow responsibilities, Dataverse schema, governance controls, demo path, and ALM approach, supported by redacted screenshots in `screenshots/` and the architecture diagram in `architecture/`.
+The repo documents the six-flow architecture, Dataverse schema, governance controls, demo path and ALM approach. The [screenshot index](../screenshots/README.md#evidence-index) includes secure intake, successful pictured Create Request actions, a lookup NotFound run, status responses and SLA configuration. Fulfilment remains simulated.
 
 ## Issues To Watch
 
@@ -53,9 +53,5 @@ The repo documents the architecture, flow responsibilities, Dataverse schema, go
 
 ## Next Documentation Tasks
 
-- Add evidence references next to relevant docs.
+- Capture expanded manager/row mappings and missing-manager responses, controlled GetStatus ownership tests, and SLA run-after/runtime continuation evidence. Technical gaps are listed in the individual flow pages.
 - Add release notes once solution package evidence is available.
-
-## Screenshot Evidence Refresh
-
-Updated evidence covers secure intake, manager lookup, Create Request success and lookup-error runs, status response boundaries, and SLA error-handling configuration. The [screenshot index](../screenshots/README.md#updated-evidence-index) records replacements and retained evidence. The six-flow main architecture and simulated fulfilment scope remain unchanged. New canvases do not establish exact expressions hidden in collapsed actions or passing tests for the SLA update.

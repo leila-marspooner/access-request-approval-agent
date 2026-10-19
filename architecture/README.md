@@ -7,17 +7,15 @@ The project uses Copilot Studio for conversational intake, Power Automate for de
 ## Request Lifecycle
 
 ```text
-Requester
-  -> Copilot Studio Access Request Agent
-  -> Flow A — Create Request
-  -> Flow H — SummariseCase
-  -> Dataverse Access Requests
-  -> Flow B — Approval Watcher
-  -> Teams Adaptive Card
-  -> Dataverse decision write-back
-  -> Flow C — Resolution Watcher
-  -> Flow D — SLA Reminder / Escalation Watcher
-  -> Model-driven app visibility
+Requester -> Copilot Studio -> Flow A — Create Request -> Dataverse Access Requests
+                                  |                          |
+                                  v                          +-> Flow B — Approval Watcher
+                           Flow H — SummariseCase                 -> Teams decision -> Dataverse
+                                                             +-> Flow C — Resolution Watcher
+                                                                  -> Simulated fulfilment / closure -> Dataverse
+Scheduled Flow D — SLA Reminder / Escalation Watcher <-> Dataverse
+Copilot Studio -> GetStatus <-> Dataverse
+Model-driven app <-> Dataverse
 ```
 
 ## Component Responsibilities
@@ -44,8 +42,12 @@ This is especially important for approval and SLA processes, where duplicate mes
 
 | Mode | Purpose | Identity Pattern |
 |---|---|---|
-| Access Request Agent (Public) | Easy portfolio review and demo testing | RequestorEmail / UPN may be typed by the requester |
-| Access Request Agent (Internal Auth / Secure) | Enterprise-aligned intake pattern | RequestorEmail / UPN and RequestorAadObjectId are captured from Entra ID context where available |
+| Access Request Agent (Public) | Easy portfolio review and demo testing | Requester and approver emails are conversational demo inputs |
+| Access Request Agent (Internal Auth / Secure) | Enterprise-aligned intake pattern | Signed-in email and principal name are validated; Flow A contains manager lookup |
+
+The [secure topic](../agents/secure-agent.md) stops on missing required identity claims and maps principal name into the existing `ApproverEmail` flow input. [Flow A](../flows/flow-a-create-request.md) shows manager lookup before creation; exact lookup and row mappings remain to verify. `RequestorAadObjectId` capture is not shown in the six-input topic call. The documented public/demo contract needs separate verification against the current flow.
+
+[GetStatus](../flows/flow-get-status.md) has captured allowed and generic denied responses, but its server-side ownership predicate remains unverified. [Flow D](../flows/flow-d-sla-watcher.md) has per-request and outer error scopes; continuation after item failures is a verification goal, not a demonstrated guarantee.
 
 ## Solution Architecture Diagram
 

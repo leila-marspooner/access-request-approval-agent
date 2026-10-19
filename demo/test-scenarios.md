@@ -17,20 +17,16 @@ Use demo-safe data only. These scenarios are intended to prove the lifecycle and
 | Resolution idempotency | Retrigger or inspect Flow C logic | ResolvedOn and FulfilmentStarted help prevent duplicate resolution work |
 | SLA reminder | Use a pending request past the SLA threshold | ReminderCount and LastReminderOn update |
 | Escalation | Use a pending request past the reminder limit | Escalated, EscalationCount, and EscalatedOn update |
-| Status lookup | Ask GetStatus for a known request | Agent returns the current Dataverse-backed lifecycle state |
+| Status lookup | Use a known request with its requester, another user and missing identity | Only the permitted caller receives details; other cases receive a generic denial |
+| Missing secure identity | Exercise sign-in, principal-name and email gates separately | Intake stops before Flow A when a required claim is missing |
+| Missing manager | Exercise lookup NotFound and a successful lookup with blank manager email separately | No row creation on these paths; capture and verify a safe error response for each |
+| SLA item failure | Force one item to fail in a multi-record sweep | Verify the item handler, notification and later-record processing; not established by current captures |
 
-## Evidence To Capture
+## Evidence Guidance
 
-- Copilot Studio topic screenshots
-- Dataverse Access Requests row before and after decision
-- Teams Adaptive Card approval/rejection
-- Flow run evidence for Flow A, Flow B, Flow C, and Flow D
-- BYOM fallback evidence where available
-- Model-driven app status and SLA views
+Configuration, conversation, selected run and model-driven app images are already in the [screenshot index](../screenshots/README.md#evidence-index). The table below distinguishes captured observations from outstanding runtime and mapping checks. Capture additional evidence for those gaps using demo-safe data and redaction; do not treat the scenario matrix as completed test results.
 
-All evidence must be redacted before public use.
-
-## Updated Evidence and Remaining Tests
+## Captured Evidence and Outstanding Tests
 
 | Scenario | Observed evidence | Remaining verification |
 |---|---|---|
@@ -38,7 +34,7 @@ All evidence must be redacted before public use.
 | Manager lookup succeeds | [Create run](../screenshots/createFlowRunHistorySuccess.png) and [return](../screenshots/createFlowRunSuccessReturn.png) | Expanded manager and Dataverse mappings |
 | Manager lookup NotFound | [Error run](../screenshots/createFlowManagerNotFound.png): create branch skipped, CATCH executed | Separately exercise successful lookup with empty manager email |
 | Status allowed / denied | [Allowed](../screenshots/copilotStatusAllowed.png) and [denied](../screenshots/copilotStatusOwnershipDenied.png) for AR001025 | Controlled two-user test and server-side predicate inspection |
-| Unknown request | [Generic denial](../screenshots/copilotStatusNotFound.png) for AR000000 | Confirm no existence disclosure across all failure paths |
+| Unknown-reference example | [Generic denial](../screenshots/copilotStatusNotFound.png) for AR000000 | Confirm no existence disclosure across all failure paths |
 | SLA error scopes | [Configuration](../screenshots/slaWatcherOverview.png) | Run reminder, escalation and item-failure cases; verify delivery and continuation |
 
 These are screenshot observations, not a claim that the entire scenario matrix passed. Simulated fulfilment does not grant real access.

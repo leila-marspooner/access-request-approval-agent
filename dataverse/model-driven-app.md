@@ -49,13 +49,15 @@ The app shows that the project is not only a chatbot. It demonstrates operationa
 
 ## Screenshot Evidence
 
-Add redacted screenshots of:
+Available redacted screenshots:
 
-- Main request form
-- Summary and traceability tab
-- SLA / operations tab
-- Escalated requests view
-- Service performance or metrics view
-- Audit history
+- [Main request form](../screenshots/modelDrivenForm.png)
+- [Summary and traceability tab](../screenshots/modelAppRecordSummaryTraceabilityTab.png)
+- [SLA / operations tab](../screenshots/modelDrivenAppFormSLA.png)
+- [Escalated requests view](../screenshots/modelDrivenAppEscalatedTickets.png)
+- [Service performance view](../screenshots/modelAppDashboardServicePerformance.png)
+- [Audit history](../screenshots/auditHistory.png)
+
+These show operational views, not verification of the current SLA sweep's counter expressions or failure continuation.
 
 Do not expose live Dataverse data, real user names, real emails, environment URLs, tenant values, or private audit details.

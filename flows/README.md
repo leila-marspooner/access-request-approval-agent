@@ -56,7 +56,8 @@ Copilot Studio calls the flow.
 - Validate required inputs
 - Generate a CorrelationId
 - Call Flow H — SummariseCase
-- Create a Dataverse Access Requests row
+- Look up the manager and check manager-email availability in the secure route
+- Create a Dataverse Access Requests row on the accepted path
 - Set the initial lifecycle state
 - Return request confirmation to Copilot Studio
 
@@ -66,9 +67,10 @@ Copilot Studio calls the flow.
 - AccessLevel
 - Justification
 - DurationDays
-- RequestorEmail
-- RequestorAadObjectId where available
+- RequesterEmail (secure flow input label)
 - ApproverEmail
+
+In the secure topic, the visible requester-email input is labelled `RequesterEmail` and is sourced from signed-in email; `ApproverEmail` carries signed-in principal name. Flow A includes manager lookup and manager-email branching before creation. Public/demo intake documents typed requester/approver emails, but compatibility with the current lookup path needs separate verification. `RequestorAadObjectId` is a schema/design field, not an input shown in this six-input call. See [Flow A input mappings](flow-a-create-request.md#inputs-from-copilot-studio).
 
 ### Key Dataverse Fields Updated
 
@@ -101,6 +103,7 @@ Copilot Studio calls the flow.
 - Request creation should fail safely if required fields are missing.
 - AI summarisation should not block the whole process if the model call fails.
 - Error responses should be user-friendly and not expose technical details.
+- The lookup NotFound run shows skipped creation and executed CATCH. The separate blank-manager-email branch, complete error return, and expanded mappings remain to verify; see [Flow A evidence](flow-a-create-request.md).
 
 ---
 
@@ -178,6 +181,7 @@ Called by Copilot Studio from the GetStatus topic.
 ### Typical Inputs
 
 - Request Number or request identifier
+- Trusted requester identity for ownership checks in a secure design; the current binding is not visible in the captures
 
 ### Typical Outputs
 
@@ -192,7 +196,7 @@ Called by Copilot Studio from the GetStatus topic.
 ### Governance Notes
 
 - The flow should return only information the requester is allowed to see.
-- Updated status conversations show allowed and generic denied responses; the exact server-side ownership predicate still needs expanded configuration and controlled identity tests. See [GetStatus evidence](flow-get-status.md#observed-status-responses).
+- Captured status conversations show allowed and generic denied responses; the exact server-side ownership predicate and identity binding still need expanded configuration and controlled identity tests. See [GetStatus verification](flow-get-status.md#ownership-restrictions-and-verification).
 - Responses should avoid exposing internal-only fields unless appropriate.
 
 ---
@@ -378,7 +382,9 @@ Scheduled recurrence.
 - EscalationCount
 - EscalatedOn
 
-### Key Dataverse Fields Updated
+### Intended Dataverse Fields Updated
+
+The canvas contains Dataverse update/stamp actions; their field mappings remain to verify.
 
 - ReminderCount
 - LastReminderOn
@@ -411,8 +417,8 @@ There is no separate risk flag field in the current schema. Escalation is tracke
 ### Governance Notes
 
 - Scheduled watcher logic demonstrates autonomous operations.
-- Reminder and escalation actions are written back to Dataverse.
-- One failed record should not stop the entire scheduled sweep where possible.
+- Teams reminder/escalation and Dataverse stamp/update actions are visible; exact write-back expressions and runtime delivery remain to verify.
+- Per-request and outer error scopes are configured. Run-after settings and continuation after item failure are unverified; see [Flow D error handling](flow-d-sla-watcher.md#error-handling).
 - Escalation should be controlled to avoid repeated uncontrolled notifications.
 
 ---
@@ -421,7 +427,7 @@ There is no separate risk flag field in the current schema. Escalation is tracke
 
 ### Dataverse as System of Record
 
-Each flow writes lifecycle state back to Dataverse.
+Lifecycle-changing flows write state back to Dataverse; GetStatus reads it, and Flow H returns a summary to Flow A. SLA error-message delivery and error persistence remain unverified.
 
 This means the request record contains the operational truth, rather than relying only on Teams messages, chat history, or Power Automate run history.
 
@@ -497,58 +503,18 @@ These troubleshooting notes are for portfolio review and future maintainers. The
 
 ## Screenshot Checklist
 
-Add redacted screenshots for each flow when ready.
+The evidence is already linked in the individual flow pages. Configuration views show action/branch structure; only visible runtime indicators establish pictured action results.
 
-### Essential Screenshots
+| Flow | Available evidence | Still needs verification |
+|---|---|---|
+| [Flow A](flow-a-create-request.md) | Secure topic call, child-flow/manager/row-creation actions, successful pictured run and NotFound CATCH run | Expanded validation, identity/manager/row mappings, blank manager email, safe error return and fallback runtime |
+| [Flow H](flow-h-summarise-case.md) | BYOM overview, summary expression and fallback action | Secret configuration without values and forced failure/throttling with returned fallback |
+| [GetStatus](flow-get-status.md) | Flow/topic canvases plus allowed and generic denied conversations | Trusted identity binding, ownership predicate and controlled cross-user tests |
+| [Flow B](flow-b-approval-watcher.md) | Trigger/action overview and Teams approval example | Expanded trigger filters, idempotency assignments, decision/error write-back and duplicate-trigger test |
+| [Flow C](flow-c-resolution-watcher.md) | Approved/rejected branches, error actions and notification examples | Expanded idempotency/row mappings and controlled repeat/error tests |
+| [Flow D](flow-d-sla-watcher.md) | Recurrence, overdue branches, per-request/outer error scopes, older CATCH run and Teams reminder | Exact schedule/query/updates/run-after settings and multi-record failure-continuation tests |
 
-- Flow A — Create Request overview
-- Flow A showing CorrelationId generation
-- Flow A calling Flow H — SummariseCase
-- Flow H — SummariseCase overview
-- Flow H showing BYOM configuration pattern
-- Flow H showing fallback handling
-- GetStatus helper flow
-- Flow B — Approval Watcher overview
-- Flow B showing ApprovalRequestSent idempotency check
-- Teams Adaptive Card generated by Flow B
-- Flow B writing ApproverDecision and ApproverComments to Dataverse
-- Flow C — Resolution Watcher overview
-- Flow C showing ResolvedOn / FulfilmentStarted logic
-- Flow D — SLA Reminder / Escalation Watcher overview
-- Flow D showing ReminderCount / LastReminderOn update
-- Flow D showing Escalated / EscalationCount / EscalatedOn update
-
-### Nice-to-Have Screenshots
-
-- Flow run history for happy path
-- Flow run history for rejection path
-- BYOM fallback test
-- SLA watcher test run
-- Error written to ApprovalError
-- Error written to FulfilmentError
-- Connection references
-- Environment variables
-- Managed solution evidence
-
-### Do Not Publish Screenshots Showing
-
-- Tenant URLs
-- Environment URLs
-- Endpoint URLs
-- API keys
-- Client secrets
-- Bearer tokens
-- Connection details
-- Personal maker connections
-- Real email addresses
-- Private approver names
-- Private Teams channel names
-- Live Dataverse data
-- Private run history
-- Azure OpenAI endpoint values
-- Key Vault secret values
-
-Use demo data and redacted screenshots only.
+[Environment variables](../screenshots/environmentVariables.png) and [connection references](../screenshots/connectionReferences.png) are already pictured. Managed release/import proof is a separate outstanding release artefact. Use only redacted demo-safe evidence; do not publish tenant URLs, endpoints, credentials, private recipients or run data.
 
 ---
 
@@ -584,9 +550,3 @@ The strongest evidence is in the design choices:
 - Fulfilment is clearly described as simulated.
 
 This is a portfolio/demo project, but the architecture reflects patterns used in enterprise Power Platform solutions.
-
-## Updated Flow Evidence
-
-The public/demo path can collect an approver conversationally. In the updated secure path, the topic supplies signed-in principal name through the legacy `ApproverEmail` input and Create Request includes manager lookup; expanded lookup parameters remain unverified.
-
-The six-flow architecture remains unchanged. Detailed screenshots and evidence limits are on [Flow A — Create Request](flow-a-create-request.md#updated-manager-lookup-and-responses), [GetStatus](flow-get-status.md#observed-status-responses), and [Flow D — SLA Reminder / Escalation Watcher](flow-d-sla-watcher.md#updated-reminder-and-error-handling-configuration). Manager lookup is visible in Create Request; the SLA canvas shows item-level and outer error scopes. Configuration views are not passing test evidence.

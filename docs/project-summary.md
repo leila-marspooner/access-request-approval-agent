@@ -89,7 +89,9 @@ The requester uses the Access Request Agent to provide:
 - Access level
 - Business justification
 - Duration
-- Approver email
+- Requester and approver emails in public/demo mode only
+
+Secure mode first validates sign-in, principal name and email, uses signed-in requester email and passes principal name through the existing `ApproverEmail` flow input. Flow A contains manager lookup and a manager-email availability branch; the requester does not type an approver in this route.
 
 If the requested access level is Admin, the agent shows a policy acknowledgement gate before submission.
 
@@ -130,7 +132,7 @@ In both cases, Dataverse remains the authoritative lifecycle record.
 
 The requester can ask the agent to check a request status.
 
-The GetStatus helper flow retrieves the latest lifecycle state from Dataverse and returns the current Status, Status Reason, and key timestamps to Copilot Studio.
+GetStatus is Dataverse-backed and is intended to restrict responses to requests the caller may view. Captures show request details and summary for an allowed lookup, and a generic permission/not-found message for denied lookups. The exact ownership predicate and caller identity binding remain to verify; see [GetStatus](../flows/flow-get-status.md).
 
 This avoids relying on chat memory or manual support follow-up.
 
@@ -138,9 +140,9 @@ This avoids relying on chat memory or manual support follow-up.
 
 Flow D — SLA Reminder / Escalation Watcher runs on a schedule.
 
-It checks pending approvals, sends reminders, increments ReminderCount, stamps LastReminderOn, and escalates after configured thresholds.
+Its configured branches cover overdue checks, reminder delivery and escalation. The documented reminder write-back is ReminderCount and LastReminderOn.
 
-Escalation activity is written back to Dataverse using Escalated, EscalationCount, and EscalatedOn so operational follow-up is visible and auditable.
+The documented write-back design uses Escalated, EscalationCount and EscalatedOn. Screenshots show Teams and Dataverse actions plus per-request and outer error scopes. Exact updates, run-after settings and continuation after item failure remain unverified; see [Flow D](../flows/flow-d-sla-watcher.md).
 
 ---
 
@@ -169,27 +171,21 @@ The agent is the user-facing front door. Power Automate and Dataverse control th
 ### Request Access Topic
 
 1. User asks to request access.
-2. Agent asks for application name.
-3. Agent asks for access level.
-4. If access level is Admin, agent displays a policy acknowledgement message.
-5. Agent asks for business justification.
-6. Agent validates the justification.
-7. Agent asks for duration.
-8. Agent validates the duration.
-9. Agent captures requester identity.
-   - Public mode: requester email can be collected conversationally.
-   - Secure mode: requester identity is captured from Entra ID signed-in context.
-10. Agent asks for approver email.
-11. Agent calls Flow A — Create Request.
-12. Agent returns request confirmation, status, and relevant identifiers.
+2. In secure mode, the topic checks sign-in, principal name and email before intake; missing required claims lead to a message and topic termination.
+3. Agent collects application and access level, with an acknowledgement gate for Admin requests.
+4. Agent collects and validates justification and duration, then asks for submission confirmation.
+5. Public/demo mode collects requester and approver emails. Secure mode uses signed-in email and maps principal name into the existing `ApproverEmail` flow input.
+6. Agent calls Flow A — Create Request. In the secure path, Flow A includes manager lookup and manager-email availability branching before creation.
+7. Agent branches on the returned success value to show confirmation or a failure message.
+
+The [secure topic page](../agents/secure-agent.md) contains the visible six-input contract and evidence limits.
 
 ### GetStatus Topic
 
-1. User asks to check request status.
-2. Agent asks for the request reference or identifier.
-3. Agent calls GetStatus.
-4. GetStatus retrieves the current Dataverse record.
-5. Agent returns the current lifecycle state and key timestamps.
+1. User asks to check request status and provides a request reference.
+2. The topic calls GetStatus for a Dataverse-backed lookup.
+3. The captured allowed response returns details and summary; denied responses use a generic permission/not-found message.
+4. Trusted identity binding and server-side ownership enforcement still need expanded configuration and controlled identity tests.
 
 ---
 
@@ -228,7 +224,8 @@ Responsibilities:
 - Validate request inputs
 - Generate CorrelationId
 - Call Flow H — SummariseCase
-- Create Dataverse Access Requests row
+- Look up the manager and branch on manager-email availability in the secure route
+- Create Dataverse Access Requests row on the accepted path
 - Set initial lifecycle state
 - Return structured confirmation to Copilot Studio
 
@@ -254,8 +251,8 @@ Responsibilities:
 
 - Receive request reference from Copilot Studio
 - Retrieve request record from Dataverse
-- Return current Status, Status Reason, and key lifecycle timestamps
-- Support requester self-service status checks
+- Return permitted lifecycle details or a generic denial
+- Support requester self-service status checks; verify the trusted identity/ownership predicate separately
 
 ### Flow B — Approval Watcher
 
@@ -285,9 +282,7 @@ Responsibilities:
 
 ### Flow D — SLA Reminder / Escalation Watcher
 
-Scheduled watcher.
-
-Responsibilities:
+Scheduled watcher. Its configured branches support the following responsibilities; exact field mappings and runtime results remain to verify:
 
 - Find overdue pending approvals
 - Send reminder notifications
@@ -296,7 +291,7 @@ Responsibilities:
 - Escalate after configured thresholds
 - Set Escalated where appropriate
 - Stamp EscalationCount and EscalatedOn
-- Continue processing other records if one item fails
+- Include per-request and outer error scopes; continuation after item failure remains to verify
 
 ---
 
@@ -397,12 +392,14 @@ From the requester:
 - Access level
 - Business justification
 - Duration
-- Approver email
+- Requester and approver emails in public/demo mode only
 
 From secure identity context:
 
 - RequestorEmail / UPN
-- RequestorAadObjectId
+- Principal name, passed through the existing ApproverEmail flow input for the secure lookup path
+
+RequestorAadObjectId is a schema/design field; capture is not shown in the current topic call.
 
 From the approver:
 
@@ -572,7 +569,15 @@ Flow D can use Escalated, EscalationCount, and EscalatedOn to avoid repeatedly e
 
 ### Missing Secure Identity Claim
 
-The updated secure topic stops with a message when required sign-in, principal-name or email claims are missing. See [secure identity evidence](../agents/secure-agent.md#updated-signed-in-intake-evidence).
+The secure topic stops with a message when required sign-in, principal-name or email claims are missing. The captured refusal does not isolate the missing claim. See [secure identity evidence](../agents/secure-agent.md#identity-validation).
+
+### Missing Manager
+
+The Create Request configuration has an alternate branch for unavailable manager email. A captured lookup NotFound run instead skips that condition and executes CATCH. The blank-email branch and complete safe error response still need runtime evidence; see [manager handling](../flows/flow-a-create-request.md#manager-lookup-and-missing-manager-handling).
+
+### SLA Item Failure
+
+Per-request and outer error scopes are visible. Their run-after settings, notification delivery and continuation to later records remain unverified; see [SLA verification](../flows/flow-d-sla-watcher.md#evidence-limits-and-outstanding-tests).
 
 ---
 
@@ -613,6 +618,7 @@ Known gaps or areas to be careful about:
 - Microsoft Graph integration is a future improvement.
 - Production DLP policy evidence is not included unless added later.
 - Full production monitoring and alerting are not included.
+- Expanded manager lookup/row mappings, missing-manager runtime paths, GetStatus authorization and SLA failure-continuation tests remain outstanding.
 - Field-level security should only be described as implemented where supporting evidence exists.
 - Public screenshots must be redacted before publishing.
 - No secrets, API keys, client secrets, endpoint values, tenant URLs, or live user data should be published.
@@ -664,7 +670,3 @@ When editing this repo:
 The Access Request & Approval Agent demonstrates a governed access request lifecycle using Copilot Studio, Power Automate, Dataverse, Teams, Entra ID, Azure OpenAI BYOM summarisation, and model-driven app visibility.
 
 Its strongest portfolio value is not the chat interface alone. The value is the governed lifecycle behind it: structured intake, deterministic orchestration, human approval, Dataverse auditability, idempotency, error capture, SLA monitoring, escalation tracking, secure identity patterns, operational metrics, and ALM discipline.
-
-## Updated Secure Routing
-
-The public/demo path can collect an approver conversationally. In the updated secure path, the topic supplies signed-in principal name through the legacy `ApproverEmail` input and Create Request includes manager lookup; expanded lookup parameters remain unverified. See [secure topic evidence](../agents/secure-agent.md#updated-signed-in-intake-evidence).

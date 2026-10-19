@@ -57,12 +57,12 @@ API keys, client secrets, bearer tokens, endpoint URLs, tenant URLs, and private
 
 | Flow | Release Check |
 |---|---|
-| Flow A — Create Request | Validates inputs, generates CorrelationId, creates Access Requests row |
+| Flow A — Create Request | Verify secure identity/manager mappings, missing-manager paths, public/demo contract, CorrelationId and row creation |
 | Flow H — SummariseCase | Uses environment-driven BYOM configuration and fallback handling |
-| GetStatus | Reads current lifecycle state from Dataverse |
+| GetStatus | Verify trusted identity binding, permitted lookup and controlled cross-user/unknown-reference denials |
 | Flow B — Approval Watcher | Uses ApprovalRequestSent and ApprovalRequestSentOn to help prevent duplicate cards |
 | Flow C — Resolution Watcher | Uses ResolvedOn and FulfilmentStarted to help prevent duplicate resolution work |
-| Flow D — SLA Reminder / Escalation Watcher | Updates ReminderCount, LastReminderOn, Escalated, EscalationCount, and EscalatedOn |
+| Flow D — SLA Reminder / Escalation Watcher | Verify query, counter/timestamp updates, run-after settings, delivery and continuation to later records after an item failure |
 
 ## Screenshot Checks
 

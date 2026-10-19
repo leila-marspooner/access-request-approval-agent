@@ -17,9 +17,13 @@ Called from Copilot Studio by the GetStatus or Check Request Status topic.
 
 ## Dataverse Lookup
 
-The flow retrieves the matching Access Requests row and returns requester-safe lifecycle information.
+The flow looks up request information in Dataverse. The intended restriction is that a requester can see only their own permitted requests. Captured conversations demonstrate an allowed response and generic denials; they do not expose the flow-side filter or authorization expression.
 
-## Outputs
+The documented RequestorEmail / UPN input above is not proof of trusted identity binding. A typed email alone must not be treated as authorization.
+
+## Documented Response Fields
+
+The wider response contract can include the fields below. The captured allowed response specifically shows request reference, application, displayed status, submitted timestamp and summary. It does not demonstrate every optional field.
 
 - Status
 - Status Reason
@@ -34,8 +38,8 @@ The flow retrieves the matching Access Requests row and returns requester-safe l
 ## Governance Notes
 
 - Dataverse remains the system of record.
-- Updated conversation evidence demonstrates different allowed and denied responses; the exact flow-side ownership predicate is not visible. Production review should verify trusted identity binding and server-side enforcement.
-- Responses should avoid exposing internal-only error fields or private operational details.
+- Return details only after an ownership/permission check using trusted identity; the exact implementation still needs inspection.
+- Avoid exposing internal-only errors or record existence in denial messages.
 
 ## Screenshot Evidence
 
@@ -43,8 +47,6 @@ Available evidence:
 
 - [GetStatus flow](../screenshots/getStatus.png)
 - [Check Access Status topic — full flow](../screenshots/copilotTopicCheckAccessStatusFullFlow.png)
-
-Expanded authorization configuration and controlled identity test evidence remain to capture (redacted).
 
 ## Observed Status Responses
 
@@ -54,8 +56,14 @@ AR001025 returns application, displayed Status `Active`, submitted timestamp and
 
 ![Same request reference receives a permission-safe denial](../screenshots/copilotStatusOwnershipDenied.png)
 
-A separate conversation using AR001025 receives “I couldn't find a request you have permission to view.” This supports an ownership-aware user experience, but the screenshots do not show which identities were used or the underlying ownership expression.
+Another captured conversation using AR001025 receives “I couldn't find a request you have permission to view.” This supports an ownership-aware user experience, but the screenshots do not show which identities were used or the underlying ownership expression.
 
-![Unknown request reference receives the same generic denial](../screenshots/copilotStatusNotFound.png)
+![AR000000 lookup receives a generic denial and retry prompt](../screenshots/copilotStatusNotFound.png)
 
-AR000000 receives the same generic response and an option to check another number. It does not reveal whether a request exists. The older flow and topic canvases above remain useful structural evidence; they do not establish the updated authorization implementation. An expanded GetStatus lookup/filter and controlled two-user test are still needed to verify enforcement.
+AR000000 receives the same generic response and an option to check another number. The response does not reveal whether a request exists. The screenshot alone does not independently verify that the reference is absent from Dataverse.
+
+## Ownership Restrictions and Verification
+
+The permitted response and generic denials demonstrate the user-visible restriction. The older flow/topic canvases remain structural evidence, but do not establish the current ownership predicate, caller identity source or execution identity.
+
+Outstanding verification: inspect the expanded lookup/filter and authorization branch; run controlled same-user, cross-user, missing-identity and nonexistent-reference cases; confirm denied cases return no record details. Verify the public/demo path separately because typed requester email is not trusted identity.

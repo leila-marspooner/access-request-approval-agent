@@ -66,7 +66,7 @@ The project follows these design principles:
 | Least privilege | Roles separate requester, approver, fulfilment/operations, and admin responsibilities |
 | Idempotency by design | Flags and timestamps help prevent duplicate Teams cards, duplicate fulfilment, and uncontrolled escalation |
 | Auditability | Key lifecycle fields can be audited through Dataverse audit history |
-| Supportability | Errors are written back to Dataverse rather than hidden only in flow run history |
+| Supportability | Dataverse error fields support approval/resolution investigation; SLA message delivery and error persistence remain to verify |
 | Configurable deployment | Environment variables and connection references support safer ALM patterns |
 | Safe AI use | BYOM summarisation is optional support, not an access decision-maker |
 
@@ -78,8 +78,8 @@ The project supports two intentional authentication modes.
 
 | Mode | Purpose | Identity Pattern |
 |---|---|---|
-| Access Request Agent (Public) | Low-friction portfolio review and demo testing | Requester email can be collected conversationally |
-| Access Request Agent (Internal Auth / Secure) | Enterprise-aligned secure mode | RequestorEmail / UPN and RequestorAadObjectId are captured from signed-in Entra ID context |
+| Access Request Agent (Public) | Low-friction portfolio review and demo testing | Requester and approver emails are conversational demo inputs |
+| Access Request Agent (Internal Auth / Secure) | Enterprise-aligned secure mode | Signed-in email and principal name are validated before intake; object-ID capture is not shown in the current topic call |
 
 ### Public / Demo Mode
 
@@ -88,22 +88,24 @@ The public/demo variant is designed to make the project easier for reviewers to 
 In this mode:
 
 - No sign-in is required.
-- Requester email may be captured conversationally.
+- Requester and approver emails are conversational demo inputs.
+- Typed email is not proof of identity or ownership; secure status examples do not verify public lookup authorization.
 - The experience is suitable for portfolio review and demo walkthroughs.
 - It should not be presented as a secure production pattern.
 
 ### Secure / Enterprise Mode
 
-The secure variant demonstrates Entra ID-backed identity capture.
+The [secure topic](../agents/secure-agent.md) uses Entra ID-backed identity. It checks sign-in, principal name and email before intake, ends the topic when required claims are unavailable, and sources requester email from `System.User.Email`.
 
-In this mode:
+The topic maps `User.PrincipalName` into the existing `ApproverEmail` flow input. Flow A includes manager lookup and manager-email availability branching. That input is not a user-selected manager address; the exact lookup and stored approver mappings remain unverified. The lookup NotFound capture shows CATCH executing, while the separate blank-manager-email branch still needs runtime evidence.
 
-- Users are required to sign in.
-- RequestorEmail / UPN is captured from authenticated context where available.
-- RequestorAadObjectId can be stored in Dataverse for stronger identity binding.
-- The request is associated with a signed-in identity rather than only user-typed data.
+`RequestorAadObjectId` can support stronger binding in the wider design, but its capture is not visible in the current six-input topic call.
 
-This shows how the public demo pattern can be adapted toward an enterprise identity-aware design.
+### GetStatus Ownership Restrictions
+
+The [GetStatus captures](../flows/flow-get-status.md#observed-status-responses) show details for an allowed lookup and generic permission/not-found messages for denied lookups. They demonstrate the user-visible restriction, not the underlying authorization implementation.
+
+Verify trusted caller identity, execution identity, lookup/filter and ownership branch with controlled same-user, cross-user, missing-identity and nonexistent-reference cases. Dataverse requester-role recommendations alone do not prove that a flow running through a connector enforces the same boundary.
 
 ---
 
@@ -120,7 +122,7 @@ The Access Requests table includes identity-related fields to support traceabili
 | Created By | Standard Dataverse creator field |
 | Modified By | Standard Dataverse modifier field |
 
-In the secure variant, the preferred pattern is to populate requester identity from Entra ID rather than relying on user-entered values.
+The secure topic uses signed-in email. The stored manager/approver and object-ID mappings still need expanded configuration evidence. The `ApproverEmail` flow input and Dataverse field serve different roles in the current secure call.
 
 ---
 
@@ -384,7 +386,7 @@ Recommended pattern:
 3. It sends a reminder only when the request meets the configured threshold.
 4. It increments ReminderCount and stamps LastReminderOn.
 
-This reduces reminder spam and makes reminder activity auditable.
+This is the intended reminder-idempotency pattern. The current canvas shows the relevant branch/actions; exact timestamp, counter and duplicate-suppression expressions remain to verify.
 
 ### Escalation Idempotency
 
@@ -407,7 +409,7 @@ There is no separate risk flag field in the current schema. Escalation is tracke
 
 ## Error Capture
 
-The project uses TRY/CATCH-style flow handling so operational errors are written back to Dataverse.
+The project uses TRY/CATCH-style handling. ApprovalError and FulfilmentError are the documented Dataverse error fields; the SLA canvas instead shows per-request failure filtering, a run-link composition action and a Teams message action. Do not assume every flow persists every failure to a row.
 
 The goal is to make failures visible from the model-driven app without requiring every reviewer or support user to inspect Power Automate run history.
 
@@ -442,9 +444,9 @@ Examples:
 
 ### SLA Watcher Errors
 
-Flow D — SLA Reminder / Escalation Watcher should handle item-level failures where possible so one problematic request does not break the entire scheduled sweep.
+Flow D has a per-request Handle request error scope and an outer CATCH. The per-request scope contains failed-step filtering, run-link composition and a Teams message action; the outer CATCH visibly filters and composes failure details.
 
-Where implemented, errors should be written back to the relevant request row or captured in a separate operational log.
+Run-after settings, delivery, error persistence and continuation to later records remain unverified. Item isolation is the intended resilience goal. The earlier failed-TRY/successful-CATCH run is not proof of this current per-request behaviour. See [Flow D verification](../flows/flow-d-sla-watcher.md#evidence-limits-and-outstanding-tests).
 
 ---
 
@@ -762,7 +764,3 @@ Its security value comes from the combination of:
 - Connection references and ALM discipline
 
 The project should remain clearly positioned as a portfolio/demo case study unless it is later hardened, reviewed, monitored, and integrated with real production provisioning systems.
-
-## Updated Identity and Status Evidence
-
-The [secure topic](../agents/secure-agent.md#updated-signed-in-intake-evidence) uses signed-in email and principal-name checks and refuses intake when required claims are unavailable. The [GetStatus examples](../flows/flow-get-status.md#observed-status-responses) show an allowed response and generic denials. These demonstrate the user-visible boundary; they do not disclose or independently verify the server-side ownership predicate. Verify that predicate with trusted identity inputs and controlled cross-user tests before production use. Manager lookup is visible in Create Request, but expanded lookup and record mappings remain to capture.

@@ -16,7 +16,7 @@ Typical values may include:
 - Rejected
 - Fulfilled or Resolved, depending on the final Dataverse configuration
 
-Use the screenshots and solution metadata as the source of truth for final published values.
+The captured GetStatus response displays `Active`. Its source expression is not shown, so it must not be treated as proof of approval, real provisioning or a new lifecycle choice. Verify Status/Status Reason mappings against solution metadata before publishing exact option values.
 
 ## Status Reason
 

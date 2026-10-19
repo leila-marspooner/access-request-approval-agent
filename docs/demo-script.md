@@ -16,13 +16,15 @@ Suggested fictional values:
 - AccessLevel: Admin or Elevated
 - DurationDays: 14
 - Justification: temporary project need
-- ApproverEmail: redacted demo approver address
+- Public/demo only: fictional requester and approver email inputs
 
-Highlight validation and the Admin access acknowledgement gate where applicable.
+For secure mode, show the identity gates before intake and explain that requester email comes from sign-in. Principal name is passed into the existing ApproverEmail flow input for the manager lookup path; the requester does not type a manager address. Do not claim object-ID capture from this six-input call.
+
+Highlight validation, submission confirmation and the Admin access acknowledgement gate where applicable.
 
 ## Scene 2 — Request Created
 
-Show Flow A — Create Request creating the Access Requests row.
+Show Flow A — Create Request manager lookup and row creation. Compare the successful pictured actions with lookup NotFound entering CATCH; distinguish this from the untested manager-email-empty branch. Expanded lookup/row mappings still need verification.
 
 Explain that Dataverse becomes the system of record after submission and that the agent does not own the lifecycle state.
 
@@ -42,7 +44,7 @@ The approver reviews the request, adds comments, and approves or rejects. Then s
 
 Show the requester asking the agent for status.
 
-GetStatus should retrieve current lifecycle state from Dataverse rather than relying on chat memory.
+Show the [allowed and generic denied responses](../flows/flow-get-status.md#observed-status-responses). They are Dataverse-backed status examples; exact ownership enforcement and the identities in these sessions remain unverified. Displayed Status `Active` is not proof of real access provisioning.
 
 ## Scene 6 — Resolution / Mock Fulfilment
 
@@ -54,7 +56,7 @@ For a rejected request, show that the lifecycle closes without fulfilment.
 
 ## Scene 7 — SLA Watcher
 
-Show Flow D — SLA Reminder / Escalation Watcher checking overdue pending approvals.
+Show Flow D — SLA Reminder / Escalation Watcher configuration for overdue pending approvals, including per-request and outer error scopes. Present the following fields as the intended write-back design. Runtime delivery, exact updates and continuation after item failure remain to verify; do not narrate the configuration as a passing sweep test.
 
 Highlight:
 
@@ -71,7 +73,3 @@ Show the model-driven app, RBAC/security evidence, Field Security Profile eviden
 ## Closing Line
 
 This project demonstrates how a Copilot Studio agent can act as the front door to a governed business-process pattern while Power Automate, Dataverse, Teams, Entra ID, Azure OpenAI, Key Vault, RBAC, audit history, SLA monitoring, and ALM controls provide the architecture behind it.
-
-## Evidence Notes for the Updated Secure Demo
-
-Follow the [updated walkthrough](../demo/walkthrough.md#updated-secure-walkthrough-evidence). Show signed-in identity validation and manager lookup, then compare the allowed and generic denied status responses. Explain that the exact ownership predicate remains to verify. Present the SLA canvas as configuration evidence, and the Create Request run indicators only as evidence for the actions pictured. No screenshot demonstrates real access provisioning.

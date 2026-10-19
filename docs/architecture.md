@@ -7,17 +7,15 @@ Copilot Studio provides the conversational front end. Power Automate handles det
 ## High-Level Flow
 
 ```text
-Requester
-  -> Copilot Studio Access Request Agent
-  -> Flow A — Create Request
-  -> Flow H — SummariseCase
-  -> Dataverse Access Requests
-  -> Flow B — Approval Watcher
-  -> Teams Adaptive Card
-  -> Dataverse decision update
-  -> Flow C — Resolution Watcher
-  -> Flow D — SLA Reminder / Escalation Watcher
-  -> Model-driven app
+Requester -> Copilot Studio -> Flow A — Create Request -> Dataverse Access Requests
+                                  |                          |
+                                  v                          +-> Flow B — Approval Watcher
+                           Flow H — SummariseCase                 -> Teams decision -> Dataverse
+                                                             +-> Flow C — Resolution Watcher
+                                                                  -> Simulated fulfilment / closure -> Dataverse
+Scheduled Flow D — SLA Reminder / Escalation Watcher <-> Dataverse
+Copilot Studio -> GetStatus <-> Dataverse
+Model-driven app <-> Dataverse
 ```
 
 ## Why Power Automate Instead Of Agent Flows
@@ -44,8 +42,12 @@ Watcher flows use Dataverse state to decide what should happen next. This makes 
 
 | Mode | Purpose | Identity Pattern |
 |---|---|---|
-| Access Request Agent (Public) | Low-friction public portfolio demo | RequestorEmail / UPN may be collected conversationally |
-| Access Request Agent (Internal Auth / Secure) | Enterprise-aligned authenticated pattern | RequestorEmail / UPN and RequestorAadObjectId are captured from Entra ID context where available |
+| Access Request Agent (Public) | Low-friction public portfolio demo | Requester and approver emails are conversational demo inputs |
+| Access Request Agent (Internal Auth / Secure) | Enterprise-aligned authenticated pattern | Signed-in email and principal name are validated; Flow A contains manager lookup |
+
+The [secure topic](../agents/secure-agent.md) stops on missing required identity claims and maps principal name into the existing `ApproverEmail` flow input. [Flow A](../flows/flow-a-create-request.md) shows manager lookup before creation; exact lookup and row mappings remain to verify. `RequestorAadObjectId` capture is not shown in the six-input topic call. The documented public/demo contract needs separate verification against the current flow.
+
+[GetStatus](../flows/flow-get-status.md) has captured allowed and generic denied responses, but its server-side ownership predicate remains unverified. [Flow D](../flows/flow-d-sla-watcher.md) has per-request and outer error scopes; continuation after item failures is a verification goal, not a demonstrated guarantee.
 
 ## AI Summarisation Layer
 

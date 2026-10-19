@@ -18,6 +18,8 @@ The watcher should only process rows that meet the approval criteria, such as:
 - ApprovalRequestSent is not true
 - ApproverEmail is present
 
+The stored ApproverEmail is the approval destination. It must not be confused with the secure topic's existing `ApproverEmail` flow input, which carries principal name into Flow A. The manager-to-row mapping is not expanded in the current evidence.
+
 ## Key Dataverse Fields Read
 
 - Status
@@ -68,9 +70,4 @@ Available evidence:
 - [Flow B — Approval Watcher overview](../screenshots/approvalWatcherOverview.png)
 - [Teams Adaptive Card approval](../screenshots/teamsAccessRequestApproved.jpeg)
 
-Still to capture (redacted):
-
-- Dataverse trigger
-- ApprovalRequestSent idempotency check
-- Decision write-back
-- ApprovalError path where available
+The overview already shows the Dataverse trigger, approval-sent update, decision branches and CATCH update action. Still needed: expanded trigger filters, ApprovalRequestSent/ApprovalRequestSentOn mappings, decision/error field assignments and a controlled duplicate-trigger test. Collapsed action names do not prove these details.

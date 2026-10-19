@@ -12,7 +12,7 @@ These items are realistic next steps for the **Access Request & Approval Agent**
 
 ## Identity And Approval Routing
 
-- Validate ApproverEmail against Entra ID.
+- Verify manager-to-approver mappings in the secure route and validate typed demo approver addresses before any production use.
 - Extend the visible Get manager (V2) pattern with verified directory lookup parameters, missing-manager handling tests, and service-owner routing where needed.
 - Add delegated approvals for out-of-office scenarios.
 - Add duplicate request detection.

@@ -70,13 +70,7 @@ Examples include notification failures, simulated fulfilment failures, and Datav
 Available evidence:
 
 - [Flow C — Resolution Watcher overview](../screenshots/resolutionWatcher.png)
-- [Requester notification — access approved](../screenshots/email-access-success.png)
+- [Simulated fulfilment notification — access approved](../screenshots/email-access-success.png)
 - [Requester notification — access declined](../screenshots/email-access-declined.png)
 
-Still to capture (redacted):
-
-- Approved branch
-- Rejected branch
-- ResolvedOn and FulfilmentStarted checks
-- FulfilmentNotes write-back
-- FulfilmentError path where available
+The overview already shows approved/rejected branches with notification, row-update and error-log actions. Still needed: expanded ResolvedOn/FulfilmentStarted checks, FulfilmentNotes/FulfilmentError mappings and controlled repeat/error tests. Notification wording such as “provisioned” is demo output; it does not mean real access was granted.

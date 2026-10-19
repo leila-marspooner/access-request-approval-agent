@@ -1,86 +1,53 @@
 # Flow D — SLA Reminder / Escalation Watcher
 
-## Purpose
+## Purpose and Trigger
 
-Flow D — SLA Reminder / Escalation Watcher monitors pending approvals so requests do not silently stall.
+Flow D — SLA Reminder / Escalation Watcher is a scheduled Power Automate flow for overdue pending approvals. The canvas shows Recurrence, TRY, Fetch Approval Requests, Apply to each and a per-request Still Pending condition. The recurrence interval and query/filter expressions are not expanded.
 
-It demonstrates autonomous operational monitoring after the requester has left the chat experience.
+## Configuration and Dataverse State
 
-## Trigger
+The documented configuration uses environment variables for reminder threshold, maximum reminders, escalation recipient and routing destination. Do not publish their private values.
 
-Scheduled recurrence, usually daily or aligned to demo needs.
+The lifecycle design uses Status, Status Reason, ApprovalRequestSent, ApprovalRequestSentOn, DecisionOn and ApproverEmail to identify pending approvals, with ReminderCount, LastReminderOn, Escalated, EscalationCount and EscalatedOn for monitoring state. The exact query, condition and row-update mappings remain to verify.
 
-## Configuration
+## Reminder and Escalation Logic
 
-Use environment variables or other safe configuration patterns for:
+Inside Still Pending, the expanded canvas shows ThresholdHours, DueTime, Overdue, NewReminderCount, MaxReminders and Escalate. The escalation branch contains a Teams escalation action and DV — Stamp Escalation; the other branch contains a Teams reminder and DV — Update Reminder Counters.
 
-- SLA reminder threshold
-- Maximum reminders
-- Escalation recipient
-- Approval routing destination
+The documented write-back design is:
 
-Do not hardcode or publish real recipients, channel IDs, tenant values, or endpoint URLs.
+| Branch | Intended fields |
+|---|---|
+| Reminder | Increment ReminderCount and stamp LastReminderOn |
+| Escalation | Set Escalated, increment EscalationCount and stamp EscalatedOn |
 
-## Key Dataverse Fields Read
-
-- Status
-- Status Reason
-- ApprovalRequestSent
-- ApprovalRequestSentOn
-- DecisionOn
-- ApproverEmail
-- ReminderCount
-- LastReminderOn
-- Escalated
-- EscalationCount
-- EscalatedOn
-
-## Key Dataverse Fields Updated
-
-- ReminderCount
-- LastReminderOn
-- Escalated
-- EscalationCount
-- EscalatedOn
-
-## Reminder Pattern
-
-1. Find pending requests where approval was sent and no decision has been returned.
-2. Compare ApprovalRequestSentOn and LastReminderOn against the configured SLA threshold.
-3. Send a reminder where appropriate.
-4. Increment ReminderCount.
-5. Stamp LastReminderOn.
-
-## Escalation Pattern
-
-1. Check whether ReminderCount has reached the configured limit.
-2. Set Escalated.
-3. Increment EscalationCount.
-4. Stamp EscalatedOn.
-5. Avoid repeated uncontrolled escalation of the same request.
+These action names establish the branch structure. Their collapsed expressions do not establish the exact thresholds, timestamp calculations, duplicate-suppression checks or values written. The displayed order is Teams notification followed by Dataverse update; notification delivery and write-back must be checked in runtime evidence.
 
 ## Error Handling
 
-The watcher should handle item-level failures where possible so one problematic record does not break the entire scheduled sweep.
+Within Apply to each, Process current request is followed by Handle request error. That handler contains Filter failed request steps, Compose run link and a Teams message action. An outer CATCH contains failed-step filtering and failure-detail composition.
 
-Where implemented, item errors should be captured on the request row or in an operational log.
+This is configured error handling. The run-after settings, filter expressions, message destination and lower part of the outer CATCH are not shown. The screenshots do not prove that an item failure is reported successfully, that later items continue, or that all failures are persisted to Dataverse. Isolating a bad record so the sweep can continue is the intended resilience goal, pending verification.
 
-## Updated Reminder and Error-Handling Configuration
-
-![SLA watcher recurrence and nested error scopes](../screenshots/slaWatcherOverview.png)
-
-Recurrence enters TRY, fetches approval requests, and processes each request with a Still Pending condition. The per-request error scope filters failed steps, composes a run link and contains a Teams message action. An outer CATCH filters and composes failure details. Destinations, expressions and run-after settings are collapsed; this configuration image does not prove notification delivery or that all item failures allow the sweep to continue.
-
-![SLA overdue decision with reminder and escalation branches](../screenshots/slaMaxRemindersGate.png)
-
-The expanded canvas shows ThresholdHours, DueTime, Overdue, NewReminderCount, MaxReminders, and Escalate. The two branches contain Teams escalation/reminder actions and Dataverse stamp/update actions. Expanded counter expressions and row updates are still needed to verify the exact write-back semantics.
+The earlier failed-TRY/successful-CATCH run is separate evidence of error-path execution in an earlier capture. It is not a test of this per-request handler or of continuation after item failure.
 
 ## Screenshot Evidence
 
-Available evidence:
+![SLA watcher recurrence and nested error scopes](../screenshots/slaWatcherOverview.png)
 
-- [Maximum reminders gate](../screenshots/slaMaxRemindersGate.png)
+Scheduled sweep, per-request error handler and visible portion of outer CATCH; configuration view.
+
+![SLA overdue decision with reminder and escalation branches](../screenshots/slaMaxRemindersGate.png)
+
+Overdue and reminder-limit branching with Teams and Dataverse actions; configuration view.
+
 - [Earlier failed TRY with successful CATCH run](../screenshots/slaTryFailCatchSuccess.png)
-- [Teams approval reminder](../screenshots/teamsApprovalReminder.png)
+- [Teams approval reminder example](../screenshots/teamsApprovalReminder.png)
 
-Still needed: expanded overdue query, recurrence schedule, counter/timestamp expressions, run-after settings, and runtime evidence for both reminder and escalation branches. The older TRY/CATCH run remains a separate example, not a test result for this updated configuration.
+## Evidence Limits and Outstanding Tests
+
+- Expand recurrence, overdue query, Still Pending condition and threshold expressions.
+- Verify reminder/escalation counter, timestamp and duplicate-suppression mappings.
+- Inspect run-after settings for per-request handling, loop continuation and outer CATCH.
+- Run a multi-record sweep with a forced item failure and show later records processing.
+- Verify reminder, escalation and error-message delivery, Dataverse write-back and outer-CATCH handling separately.
