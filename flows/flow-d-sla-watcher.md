@@ -65,17 +65,22 @@ The watcher should handle item-level failures where possible so one problematic 
 
 Where implemented, item errors should be captured on the request row or in an operational log.
 
+## Updated Reminder and Error-Handling Configuration
+
+![SLA watcher recurrence and nested error scopes](../screenshots/slaWatcherOverview.png)
+
+Recurrence enters TRY, fetches approval requests, and processes each request with a Still Pending condition. The per-request error scope filters failed steps, composes a run link and contains a Teams message action. An outer CATCH filters and composes failure details. Destinations, expressions and run-after settings are collapsed; this configuration image does not prove notification delivery or that all item failures allow the sweep to continue.
+
+![SLA overdue decision with reminder and escalation branches](../screenshots/slaMaxRemindersGate.png)
+
+The expanded canvas shows ThresholdHours, DueTime, Overdue, NewReminderCount, MaxReminders, and Escalate. The two branches contain Teams escalation/reminder actions and Dataverse stamp/update actions. Expanded counter expressions and row updates are still needed to verify the exact write-back semantics.
+
 ## Screenshot Evidence
 
 Available evidence:
 
 - [Maximum reminders gate](../screenshots/slaMaxRemindersGate.png)
-- [TRY/CATCH handling — success path](../screenshots/slaTryFailCatchSuccess.png)
+- [Earlier failed TRY with successful CATCH run](../screenshots/slaTryFailCatchSuccess.png)
 - [Teams approval reminder](../screenshots/teamsApprovalReminder.png)
 
-Still to capture (redacted):
-
-- Recurrence trigger
-- Query/filter for overdue pending approvals
-- ReminderCount and LastReminderOn update
-- Escalated, EscalationCount, and EscalatedOn update
+Still needed: expanded overdue query, recurrence schedule, counter/timestamp expressions, run-after settings, and runtime evidence for both reminder and escalation branches. The older TRY/CATCH run remains a separate example, not a test result for this updated configuration.

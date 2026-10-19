@@ -55,3 +55,7 @@ The repo documents the architecture, flow responsibilities, Dataverse schema, go
 
 - Add evidence references next to relevant docs.
 - Add release notes once solution package evidence is available.
+
+## Screenshot Evidence Refresh
+
+Updated evidence covers secure intake, manager lookup, Create Request success and lookup-error runs, status response boundaries, and SLA error-handling configuration. The [screenshot index](../screenshots/README.md#updated-evidence-index) records replacements and retained evidence. The six-flow main architecture and simulated fulfilment scope remain unchanged. New canvases do not establish exact expressions hidden in collapsed actions or passing tests for the SLA update.

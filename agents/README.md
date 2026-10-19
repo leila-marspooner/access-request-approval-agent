@@ -87,9 +87,9 @@ Fulfilment/provisioning is mocked or simulated in this portfolio project unless 
 Available evidence:
 
 - [Copilot Studio agent overview](../screenshots/copilotStudioOverview.png)
-- [Request Access topic](../screenshots/copilotTopicRequestAccess1.png)
-- [Successful request submission test](../screenshots/copilotTopicRequestAccessTestSuccess.png)
-- [Failed/validation test response](../screenshots/copilotTopicRequestAccessTestFail.png)
+- [Secure Request Access topic — identity gates and intake](../screenshots/copilotTopicRequestAccess1.png)
+- [Earlier request submission topic configuration](../screenshots/copilotTopicRequestAccessTestSuccess.png)
+- [Earlier validation topic configuration](../screenshots/copilotTopicRequestAccessTestFail.png)
 - [Check Access Status topic — full flow](../screenshots/copilotTopicCheckAccessStatusFullFlow.png)
 - [Secure agent authentication settings](../screenshots/copilotStudioAuthenticationSettings.png)
 
@@ -111,3 +111,7 @@ Use fictional demo request data and redacted screenshots only.
 - Add duplicate-request detection before submission.
 - Add approver validation against Entra ID.
 - Add clearer help text for secure versus public/demo mode.
+
+## Updated Secure Experience
+
+The [secure agent page](secure-agent.md#updated-signed-in-intake-evidence) explains signed-in identity gates and the manager lookup hand-off. Status response examples are on the [GetStatus page](../flows/flow-get-status.md#observed-status-responses). These updates retain the six-flow main architecture; they do not establish a replacement architecture using separate new-experience demo flows.

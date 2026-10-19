@@ -473,8 +473,8 @@ A short selection of redacted build evidence:
 
 | | |
 |---|---|
-| **Copilot Studio request intake — successful test** ![Copilot Studio request intake test success](screenshots/copilotTopicRequestAccessTestSuccess.png) | **Teams Adaptive Card approval** ![Teams Adaptive Card approval](screenshots/teamsAccessRequestApproved.jpeg) |
-| **Flow B — Approval Watcher** ![Flow B — Approval Watcher overview](screenshots/approvalWatcherOverview.png) | **Model-driven app — SLA form** ![Model-driven app form with SLA fields](screenshots/modelDrivenAppFormSLA.png) |
+| **Earlier Copilot Studio intake configuration** ![Earlier request intake topic configuration](screenshots/copilotTopicRequestAccessTestSuccess.png) | **Teams Adaptive Card approval** ![Teams Adaptive Card approval](screenshots/teamsAccessRequestApproved.jpeg) |
+| **Requester status response** ![Status response showing request details and summary](screenshots/copilotStatusAllowed.png) | **Model-driven app — SLA form** ![Model-driven app form with SLA fields](screenshots/modelDrivenAppFormSLA.png) |
 
 The full evidence set is in the [screenshots folder](screenshots/), covering:
 
@@ -509,3 +509,9 @@ See [screenshots/README.md](screenshots/README.md) for the evidence index and re
 This is a portfolio project built to demonstrate Power Platform, Copilot Studio, Dataverse, Power Automate, Teams, Entra ID, governance, and secure agent design patterns.
 
 It is not a production access management system. Real-world deployment would require additional security review, DLP policy configuration, tenant-specific identity governance, production monitoring, and integration with approved provisioning systems.
+
+## Updated Secure Workflow Evidence
+
+The public/demo path can collect an approver conversationally. In the updated secure path, the topic supplies signed-in principal name through the legacy `ApproverEmail` input and Create Request includes manager lookup; expanded lookup parameters remain unverified.
+
+The latest [secure topic](agents/secure-agent.md#updated-signed-in-intake-evidence) validates signed-in identity before intake. [Create Request](flows/flow-a-create-request.md#updated-manager-lookup-and-responses) shows manager lookup, row creation and error responses. [GetStatus](flows/flow-get-status.md#observed-status-responses) shows allowed and generic denied responses; the exact ownership predicate remains to verify. [SLA evidence](flows/flow-d-sla-watcher.md#updated-reminder-and-error-handling-configuration) shows reminder/escalation branches and nested error scopes as configuration, not passing runtime tests. The six-flow architecture is retained, and fulfilment remains simulated.

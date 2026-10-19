@@ -63,6 +63,30 @@ Errors should be returned to the agent as safe, user-friendly messages. Technica
 
 If Flow H — SummariseCase fails, Flow A should continue with a fallback CaseSummary rather than blocking request creation.
 
+## Updated Manager Lookup and Responses
+
+The updated canvas shows a child-flow call, CaseSummary assignment, request-title composition, `Get manager (V2)`, and a manager-email availability condition. Request creation is on the available-manager branch; the alternate branch sets failure variables. The topic passes the signed-in principal name through the legacy `ApproverEmail` input. Collapsed actions do not establish exact lookup parameters, manager email expressions, or Dataverse field mappings.
+
+![Create Request manager lookup and create-row branches](../screenshots/createFlow1.png)
+
+Configuration view of the updated request creation path.
+
+![Create Request run with successful manager lookup and row creation](../screenshots/createFlowRunHistorySuccess.png)
+
+Green action indicators show the pictured manager lookup and create-row path succeeded in this run; they do not prove approval or real access provisioning.
+
+![Create Request successful return with skipped catch](../screenshots/createFlowRunSuccessReturn.png)
+
+Continuation of the successful run: CATCH skipped and FINALLY return succeeded.
+
+![Manager lookup NotFound run enters catch](../screenshots/createFlowManagerNotFound.png)
+
+The lookup reports NotFound, the create branch is skipped, and CATCH executes. This does not prove the manager-email-empty branch ran successfully.
+
+![Create Request catch and finally configuration](../screenshots/createFlowCatchFinally.png)
+
+CATCH contains success, error-message and status assignments; FINALLY returns values to the agent. Exact run-after settings and assignment values are not expanded.
+
 ## Screenshot Evidence
 
 Available evidence:
@@ -70,9 +94,4 @@ Available evidence:
 - [Flow A — Create Request overview](../screenshots/createFlow1.png)
 - [Successful run history](../screenshots/createFlowRunHistorySuccess.png)
 
-Still to capture (redacted):
-
-- Flow trigger from Copilot Studio
-- CorrelationId generation
-- Flow H — SummariseCase call
-- Dataverse create row action
+Still needed for deeper verification: expanded trigger/input validation, manager lookup parameters, Dataverse field mappings, CorrelationId expression, and fallback configuration.

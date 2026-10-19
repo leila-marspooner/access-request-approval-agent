@@ -762,3 +762,7 @@ Its security value comes from the combination of:
 - Connection references and ALM discipline
 
 The project should remain clearly positioned as a portfolio/demo case study unless it is later hardened, reviewed, monitored, and integrated with real production provisioning systems.
+
+## Updated Identity and Status Evidence
+
+The [secure topic](../agents/secure-agent.md#updated-signed-in-intake-evidence) uses signed-in email and principal-name checks and refuses intake when required claims are unavailable. The [GetStatus examples](../flows/flow-get-status.md#observed-status-responses) show an allowed response and generic denials. These demonstrate the user-visible boundary; they do not disclose or independently verify the server-side ownership predicate. Verify that predicate with trusted identity inputs and controlled cross-user tests before production use. Manager lookup is visible in Create Request, but expanded lookup and record mappings remain to capture.

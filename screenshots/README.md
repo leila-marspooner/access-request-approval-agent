@@ -71,3 +71,26 @@ Keep denser evidence, such as audit history and full flow canvases, in the relev
 ## Publishing Rule
 
 Do not commit unredacted screenshots. All screenshots in this folder must pass the redaction rules above before publishing.
+
+## Updated Evidence Index
+
+Publication copies were reviewed visually. Source captures remain local and ignored; earlier replaced publication images were preserved privately. Publication files are re-encoded without source metadata. The identity-refusal copy masks the sign-in code; the full request topic crops maker-profile chrome. No source capture is intended for Git publication.
+
+| Publication image | Evidence and mapping |
+|---|---|
+| [createFlow1.png](createFlow1.png) | Replaces Create Request canvas; manager lookup and create-row branch. |
+| [createFlowRunHistorySuccess.png](createFlowRunHistorySuccess.png) | Replaces Create Request run view; pictured lookup and creation actions succeeded. |
+| [createFlowRunSuccessReturn.png](createFlowRunSuccessReturn.png) | Adds successful-run continuation; CATCH skipped, FINALLY return succeeded. |
+| [createFlowManagerNotFound.png](createFlowManagerNotFound.png) | Adds lookup NotFound run; CATCH executes and creation is skipped. |
+| [createFlowCatchFinally.png](createFlowCatchFinally.png) | Adds CATCH/FINALLY configuration; values and run-after settings collapsed. |
+| [slaWatcherOverview.png](slaWatcherOverview.png) | Adds recurrence, per-request handler and outer CATCH configuration. |
+| [slaMaxRemindersGate.png](slaMaxRemindersGate.png) | Replaces reminder-gate canvas; reminder/escalation branches, no runtime proof. |
+| [copilotStatusOwnershipDenied.png](copilotStatusOwnershipDenied.png) | Adds generic permission denial for AR001025; identity/predicate not shown. |
+| [copilotStatusNotFound.png](copilotStatusNotFound.png) | Adds generic denial for AR000000 and retry prompt. |
+| [copilotStatusAllowed.png](copilotStatusAllowed.png) | Adds AR001025 details and summary; displayed Active does not mean access granted. |
+| [copilotRequestIdentityDenied.png](copilotRequestIdentityDenied.png) | Adds identity refusal conversation; sign-in code masked. |
+| [copilotTopicRequestAccess1.png](copilotTopicRequestAccess1.png) | Replaces Request Access topic; signed-in gates, validation and flow mappings. Maker chrome cropped. |
+
+The existing GetStatus flow/topic canvases, earlier intake success/validation views, SLA failed-TRY/successful-CATCH run, Teams, BYOM, model-driven app, Dataverse, security and ALM screenshots are retained: no corresponding replacement was supplied. Earlier intake images are configuration views, not independent test-pass evidence. The new status conversations supplement the older GetStatus canvas; they do not replace its flow configuration evidence.
+
+Unverified mappings: the exact GetStatus ownership predicate and identities used in the two conversations are not shown. Manager lookup parameters, missing-email branch execution, SLA run-after settings and counter expressions remain hidden. No supplied image establishes that separate new-experience demo flows replace any of the six main flows. See the individual flow pages for details and test limits.

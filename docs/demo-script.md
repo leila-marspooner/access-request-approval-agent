@@ -71,3 +71,7 @@ Show the model-driven app, RBAC/security evidence, Field Security Profile eviden
 ## Closing Line
 
 This project demonstrates how a Copilot Studio agent can act as the front door to a governed business-process pattern while Power Automate, Dataverse, Teams, Entra ID, Azure OpenAI, Key Vault, RBAC, audit history, SLA monitoring, and ALM controls provide the architecture behind it.
+
+## Evidence Notes for the Updated Secure Demo
+
+Follow the [updated walkthrough](../demo/walkthrough.md#updated-secure-walkthrough-evidence). Show signed-in identity validation and manager lookup, then compare the allowed and generic denied status responses. Explain that the exact ownership predicate remains to verify. Present the SLA canvas as configuration evidence, and the Create Request run indicators only as evidence for the actions pictured. No screenshot demonstrates real access provisioning.

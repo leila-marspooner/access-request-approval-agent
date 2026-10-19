@@ -572,7 +572,7 @@ Flow D can use Escalated, EscalationCount, and EscalatedOn to avoid repeatedly e
 
 ### Missing Secure Identity Claim
 
-The secure variant can include fallback handling if the expected signed-in email claim is blank.
+The updated secure topic stops with a message when required sign-in, principal-name or email claims are missing. See [secure identity evidence](../agents/secure-agent.md#updated-signed-in-intake-evidence).
 
 ---
 
@@ -627,7 +627,7 @@ Potential future improvements include:
 - Entra group membership assignment on approval
 - Application role assignment
 - Approver validation against Entra ID
-- Auto-resolving manager or service owner from Entra ID
+- Extend and verify the visible manager lookup pattern; add service-owner routing
 - Approval delegation for out-of-office scenarios
 - Power BI reporting for request volume, SLA compliance, approval turnaround, and resolution time
 - Managed Environment and DLP policy evidence
@@ -664,3 +664,7 @@ When editing this repo:
 The Access Request & Approval Agent demonstrates a governed access request lifecycle using Copilot Studio, Power Automate, Dataverse, Teams, Entra ID, Azure OpenAI BYOM summarisation, and model-driven app visibility.
 
 Its strongest portfolio value is not the chat interface alone. The value is the governed lifecycle behind it: structured intake, deterministic orchestration, human approval, Dataverse auditability, idempotency, error capture, SLA monitoring, escalation tracking, secure identity patterns, operational metrics, and ALM discipline.
+
+## Updated Secure Routing
+
+The public/demo path can collect an approver conversationally. In the updated secure path, the topic supplies signed-in principal name through the legacy `ApproverEmail` input and Create Request includes manager lookup; expanded lookup parameters remain unverified. See [secure topic evidence](../agents/secure-agent.md#updated-signed-in-intake-evidence).

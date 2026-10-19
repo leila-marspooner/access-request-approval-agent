@@ -13,7 +13,7 @@ These items are realistic next steps for the **Access Request & Approval Agent**
 ## Identity And Approval Routing
 
 - Validate ApproverEmail against Entra ID.
-- Resolve managers automatically through Microsoft Graph.
+- Extend the visible Get manager (V2) pattern with verified directory lookup parameters, missing-manager handling tests, and service-owner routing where needed.
 - Add delegated approvals for out-of-office scenarios.
 - Add duplicate request detection.
 - Add requester cancellation or withdrawal flow.

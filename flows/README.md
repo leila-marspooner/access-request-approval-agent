@@ -192,7 +192,7 @@ Called by Copilot Studio from the GetStatus topic.
 ### Governance Notes
 
 - The flow should return only information the requester is allowed to see.
-- In a production design, secure ownership checks would be required.
+- Updated status conversations show allowed and generic denied responses; the exact server-side ownership predicate still needs expanded configuration and controlled identity tests. See [GetStatus evidence](flow-get-status.md#observed-status-responses).
 - Responses should avoid exposing internal-only fields unless appropriate.
 
 ---
@@ -584,3 +584,9 @@ The strongest evidence is in the design choices:
 - Fulfilment is clearly described as simulated.
 
 This is a portfolio/demo project, but the architecture reflects patterns used in enterprise Power Platform solutions.
+
+## Updated Flow Evidence
+
+The public/demo path can collect an approver conversationally. In the updated secure path, the topic supplies signed-in principal name through the legacy `ApproverEmail` input and Create Request includes manager lookup; expanded lookup parameters remain unverified.
+
+The six-flow architecture remains unchanged. Detailed screenshots and evidence limits are on [Flow A — Create Request](flow-a-create-request.md#updated-manager-lookup-and-responses), [GetStatus](flow-get-status.md#observed-status-responses), and [Flow D — SLA Reminder / Escalation Watcher](flow-d-sla-watcher.md#updated-reminder-and-error-handling-configuration). Manager lookup is visible in Create Request; the SLA canvas shows item-level and outer error scopes. Configuration views are not passing test evidence.

@@ -41,3 +41,7 @@ Fulfilment/provisioning is mocked or simulated.
 ## What Is Mocked
 
 The project does not grant real access. Flow C demonstrates the approval-to-resolution pattern with mock fulfilment notes and lifecycle updates.
+
+## Updated Secure Walkthrough Evidence
+
+Use the [secure topic](../agents/secure-agent.md#updated-signed-in-intake-evidence) to explain identity checks before intake and the manager lookup hand-off. Compare the [Create Request success and NotFound runs](../flows/flow-a-create-request.md#updated-manager-lookup-and-responses), then show [allowed and denied status responses](../flows/flow-get-status.md#observed-status-responses). Finish with [SLA configuration](../flows/flow-d-sla-watcher.md#updated-reminder-and-error-handling-configuration), describing runtime checks still required. Keep all fulfilment narration explicitly simulated.

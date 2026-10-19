@@ -26,3 +26,6 @@ local.settings.json
 tmp/
 temp/
 *.tmp
+
+# Private source screenshots; publish reviewed copies from screenshots/ only
+screenshots/AR-flow-updates/

@@ -29,3 +29,16 @@ Use demo-safe data only. These scenarios are intended to prove the lifecycle and
 - Model-driven app status and SLA views
 
 All evidence must be redacted before public use.
+
+## Updated Evidence and Remaining Tests
+
+| Scenario | Observed evidence | Remaining verification |
+|---|---|---|
+| Missing secure identity | [Refusal response](../screenshots/copilotRequestIdentityDenied.png) | Repeat with controlled missing-claim cases |
+| Manager lookup succeeds | [Create run](../screenshots/createFlowRunHistorySuccess.png) and [return](../screenshots/createFlowRunSuccessReturn.png) | Expanded manager and Dataverse mappings |
+| Manager lookup NotFound | [Error run](../screenshots/createFlowManagerNotFound.png): create branch skipped, CATCH executed | Separately exercise successful lookup with empty manager email |
+| Status allowed / denied | [Allowed](../screenshots/copilotStatusAllowed.png) and [denied](../screenshots/copilotStatusOwnershipDenied.png) for AR001025 | Controlled two-user test and server-side predicate inspection |
+| Unknown request | [Generic denial](../screenshots/copilotStatusNotFound.png) for AR000000 | Confirm no existence disclosure across all failure paths |
+| SLA error scopes | [Configuration](../screenshots/slaWatcherOverview.png) | Run reminder, escalation and item-failure cases; verify delivery and continuation |
+
+These are screenshot observations, not a claim that the entire scenario matrix passed. Simulated fulfilment does not grant real access.
